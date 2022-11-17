@@ -1,0 +1,29 @@
+<nav class="navbar navbar-expand-lg navbar-dark app-header">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="{% url 'index' %}">
+      <img src="../../../static/images/logo.svg" alt="Logo" width="30" height="24" class="d-inline-block align-text-top">
+      Pokedex
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse justify-content-between" id="navbarNavAltMarkup">
+      <div class="navbar-nav">
+        <a class="nav-link active" aria-current="page" href="{% url 'index' %}">Home</a>
+        <a class="nav-link" href="#">
+          <img src="../../../static/images/pokeballs.png" alt="teams" width="24" height="24">
+          Equipes
+        </a>
+      </div>
+      <form class="d-flex no-block col-sm-4 col-md-5" role="search">
+        <input class="form-control me-2" type="search" placeholder="Rechercher un pokemon" aria-label="Rechercher">
+        <button class="btn btn-outline-danger" type="submit">
+          <span class="d-flex text-center">
+            <img class="m-1" src="../../../static/images/pokedex-load.png" alt="rechercher" width="16" height="16">
+            Rechercher
+          </span>
+        </button>
+      </form>
+    </div>
+  </div>
+</nav>

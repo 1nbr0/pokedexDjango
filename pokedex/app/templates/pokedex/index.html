@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+{% load static %}
+
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="shortcut icon" type="image/svg" href="{% static 'images/logo.svg' %}"/>
+  <link rel="stylesheet" type="text/css" href="{% static 'pokedex/css/bootstrap.css' %}" />
+  <link rel="stylesheet" type="text/css" href="{% static 'pokedex/css/pokemon.css' %}" />
+  <title>Pokedex</title>
+</head>
+<body class="app">
+  {% include "./navigation/header.html" %}
+  <div class="app-container grid">
+    <h1 class="mt-2">Pokedex</h1>
+    <div class="container">
+      <div class="row justify-content-center">
+        {% for pokemon in pokemons %}
+          <div class="col-md-3 card pokemon" style="background-color: {{ pokemon.backgroundColor }}">
+            <a href="{% url 'pokemon-details' pokemon.id %}" class="link-card">
+              <div class="card-img-top">
+                <img src="{{ pokemon.sprites.other.home.front_default }}" alt="{{ pokemon.name }}" ">
+              </div>
+              <div class='card-body'>
+                <span class="number">N°{{ pokemon.id|stringformat:"03d" }}</span>
+                <h3 class="name">{{ pokemon.name|title }}</h3>
+                <small class="tag" style="background-color: {{ pokemon.color }}">
+                  <span class="type">{{ pokemon.types.0.type.name }}</span>
+                </small>
+              </div>
+            </a>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</body>
+</html>
