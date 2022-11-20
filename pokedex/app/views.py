@@ -1,5 +1,16 @@
 from django.shortcuts import render
 import requests
+from django.shortcuts import redirect
+
+# Import des models
+from .models import PokeTeam
+from .models import UserInfo
+
+# Import pour compte utilisateur
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import User
+
+
 
 # Create your views here.
 url = "https://pokeapi.co/api/v2"
@@ -93,3 +104,58 @@ def pokemonDetails(request, id):
         request,
         "pokedex/pokemonDetails.html",
         {'pokemons': pokemonDetails})
+
+
+
+
+
+
+# Compte utilisatuer
+
+def RegisterView(request):
+    if request.user.is_authenticated:
+        return redirect("index")
+    else:
+        if(request.POST.get('username') and request.POST.get('password') and request.POST.get('email')):
+            username = request.POST['username']
+            email = request.POST['email']
+            password = request.POST['password']
+            user = User.objects.create_user(username, email, password)
+            user.save()
+            poketeam = PokeTeam.objects.create(user=user)
+            poketeam.save()
+            userinfo = UserInfo.objects.create(user=user, currentTeam=poketeam.id)
+            userinfo.save()
+            return redirect("login")
+        else:
+            return render(request, 'pokedex/account/register.html')
+
+
+def LoginView(request):
+    if request.user.is_authenticated:
+        return redirect("dashboard")
+    else: 
+        if(request.POST.get('username') and request.POST.get('password')):
+            username = request.POST['username']
+            password = request.POST['password']
+            user = authenticate(request, username=username, password=password)
+            if user is not None:
+                login(request, user)
+                return redirect("dashboard")
+            else:
+                context = { 'errors' : 'User Not Found' }
+                return render(request, 'pokedex/account/login.html', context)
+        else:
+            return render(request, 'pokedex/account/login.html')
+
+
+def LogoutView(request):
+        logout(request)
+        return redirect("index")
+
+
+def dashboardView(request):
+    if request.user.is_authenticated:
+        return render(request, 'pokedex/account/dashboard.html')
+    else:
+        return redirect("login")
