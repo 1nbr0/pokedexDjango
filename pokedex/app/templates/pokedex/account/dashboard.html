@@ -7,6 +7,27 @@
     <title>Dashboard</title>
 </head>
 <body>
-        <p>Salut {{user}}</p>
+    <h1>Dashboard de {{user}}</h1>
+    <p>équipe en cours de création</p>
+    <form action="{% url 'updateTeamTitle' %}" method="POST">{% csrf_token %}<p>Titre</p>{% if currentTeam.title == None %}<input type="text" name="title">{% else %}<input type="text" name="title" value="{{currentTeam.title}}">{% endif %}<button type="submit">Modifier</button></form>
+    <li>Pokémon 1 : {{ currentTeam.idPokemon1 }} {% if currentTeam.idPokemon1 != None %}<form action="{% url 'removePokemon' %}" method="POST">{% csrf_token %}<input type="hidden" name="idPokemon" value="1"><button type="submit">Retirer</button></form>{% endif %}</li>
+    <li>Pokémon 2 : {{ currentTeam.idPokemon2 }} {% if currentTeam.idPokemon2 != None %}<form action="{% url 'removePokemon' %}" method="POST">{% csrf_token %}<input type="hidden" name="idPokemon" value="2"><button type="submit">Retirer</button></form>{% endif %}</li>
+    <li>Pokémon 3 : {{ currentTeam.idPokemon3 }} {% if currentTeam.idPokemon3 != None %}<form action="{% url 'removePokemon' %}" method="POST">{% csrf_token %}<input type="hidden" name="idPokemon" value="3"><button type="submit">Retirer</button></form>{% endif %}</li>
+    <li>Pokémon 4 : {{ currentTeam.idPokemon4 }} {% if currentTeam.idPokemon4 != None %}<form action="{% url 'removePokemon' %}" method="POST">{% csrf_token %}<input type="hidden" name="idPokemon" value="4"><button type="submit">Retirer</button></form>{% endif %}</li>
+    <li>Pokémon 5 : {{ currentTeam.idPokemon5 }} {% if currentTeam.idPokemon5 != None %}<form action="{% url 'removePokemon' %}" method="POST">{% csrf_token %}<input type="hidden" name="idPokemon" value="5"><button type="submit">Retirer</button></form>{% endif %}</li>
+      <form action="{% url 'createTeam' %}" method="POST">{% csrf_token %}<button type="submit">Créer l'équipe</button></form>
+
+
+    <p>Anciennes équipes</p>
+    {% for team in fullTeam %}
+    <p>Titre de l'équipe : {{ team.title }}</p>
+    <li>Pokémon 1 : {{ team.idPokemon1 }} </li>
+    <li>Pokémon 2 : {{ team.idPokemon2 }} </li>
+    <li>Pokémon 3 : {{ team.idPokemon3 }} </li>
+    <li>Pokémon 4 : {{ team.idPokemon4 }} </li>
+    <li>Pokémon 5 : {{ team.idPokemon5 }} </li>
+    <form action="{% url 'removeTeam' %}" method="POST">{% csrf_token %}<input type="hidden" name="id" value="{{team.id}}"><button type="submit">Supprimer l'équipe</button></form>
+    {% endfor %}
+
 </body>
 </html>
