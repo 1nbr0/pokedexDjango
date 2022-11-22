@@ -5,6 +5,15 @@ from django.urls import path
 urlpatterns = [
     path('', views.index, name="index"),
     path('pokemon/<int:id>', views.pokemonDetails, name="pokemon-details"),
+    path('team', views.pokemonTeamView, name="team"),
+
+
+    # Path team utilisateur
+    path('updateTeamTitle', views.updateTeamTitle, name="updateTeamTitle"),
+    path('addPokemon', views.addPokemonInCurrentTeam, name="addPokemon"),
+    path('removePokemon', views.removePokemonInCurrentTeam, name="removePokemon"),
+    path('createTeam', views.createTeam, name="createTeam"),
+    path('removeTeam', views.removeTeam, name="removeTeam"),
 
 
     # Path compte utilisateur

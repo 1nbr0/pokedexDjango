@@ -35,8 +35,13 @@
             <small class="type">Type: <span>{{ pokemon.types.0.type.name }}</span> </small>
           </div>
         </div>
+        <form action="{% url 'addPokemon' %}" method="post">
+          {% csrf_token %}
+          <input name="id" type="hidden" value={{pokemon.id}}>
+          <button type="submit">Ajouter</button>
+        </form>
         <!-- <div class="container-second-info">
-
+              
         </div> -->
       </div>
     </div>

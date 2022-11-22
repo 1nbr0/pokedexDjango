@@ -11,8 +11,10 @@ class UserInfo(models.Model):
 #Les équipes de pokémon
 class PokeTeam(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    title = models.CharField(blank=True, null=True, max_length=100)
     idPokemon1 = models.IntegerField(blank=True, null=True)
     idPokemon2 = models.IntegerField(blank=True, null=True)
     idPokemon3 = models.IntegerField(blank=True, null=True)
     idPokemon4 = models.IntegerField(blank=True, null=True)
     idPokemon5 = models.IntegerField(blank=True, null=True)
+    publish = models.BooleanField(blank=True, null=True)
