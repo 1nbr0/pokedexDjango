@@ -97,7 +97,7 @@ def pokemonDetails(request, id):
 
     pokemonDetails.append(getPokemonById(id))
 
-    colors = {
+    backgroundColors = {
         "fire": "#FDDFDF",
         "grass": "#DEFDE0",
         "electric": "#FCF7DE",
@@ -112,22 +112,37 @@ def pokemonDetails(request, id):
         "flying": "#F5F5F5",
         "fighting": "#E6E0D4",
         "normal": "#F5F5F5"
+        }
+
+    colors = {
+        "bug": "#8CB230",
+        "dark": "#58575F",
+        "dragon": "#0F6AC0",
+        "electric": "#EED535",
+        "fairy": "#ED6EC7",
+        "fighting": "#D04164",
+        "fire": "#FD7D24",
+        "flying": "#748FC9",
+        "ghost": "#556AAE",
+        "grass": "#62B957",
+        "ground": "#DD7748",
+        "ice": "#61CEC0",
+        "normal": "#9DA0AA",
+        "poison": "#A552CC",
+        "psychic": "#EA5D60",
+        "rock": "#BAAB82",
+        "steel": "#417D9A",
+        "water": "#417D9A",
     }
 
     for pokemon in pokemonDetails:
+        pokemon["backgroundColor"] = backgroundColors[pokemon["types"][0]["type"]["name"]]
         pokemon["color"] = colors[pokemon["types"][0]["type"]["name"]]
 
     return render(
         request,
         "pokedex/pokemonDetails.html",
         {'pokemons': pokemonDetails})
-
-
-
-
-
-
-
 
 # Gestion des équipes
 
@@ -142,8 +157,6 @@ def updateTeamTitle(request):
         return redirect('dashboard')
     else:
         return redirect('login')
-
-
 
 
 # Ajoute un pokémon dans l'équipe d'un utilisateur
@@ -244,11 +257,12 @@ def pokemonTeamView(request):
 # Compte utilisateur
 
 # Register d'un utilisateur
+
 def RegisterView(request):
     if request.user.is_authenticated:
         return redirect("index")
     else:
-        if(request.POST.get('username') and request.POST.get('password') and request.POST.get('email')):
+        if (request.POST.get('username') and request.POST.get('password') and request.POST.get('email')):
             username = request.POST['username']
             email = request.POST['email']
             password = request.POST['password']
@@ -264,10 +278,10 @@ def RegisterView(request):
 
 # Login utilisateur
 def LoginView(request):
-    if request.user.is_authenticated:
+    if (request.user.is_authenticated):
         return redirect("dashboard")
-    else: 
-        if(request.POST.get('username') and request.POST.get('password')):
+    else:
+        if (request.POST.get('username') and request.POST.get('password')):
             username = request.POST['username']
             password = request.POST['password']
             user = authenticate(request, username=username, password=password)
@@ -275,15 +289,15 @@ def LoginView(request):
                 login(request, user)
                 return redirect("dashboard")
             else:
-                context = { 'errors' : 'User Not Found' }
+                context = {'errors': 'User Not Found'}
                 return render(request, 'pokedex/account/login.html', context)
         else:
             return render(request, 'pokedex/account/login.html')
 
 # Déconnexion
 def LogoutView(request):
-        logout(request)
-        return redirect("index")
+    logout(request)
+    return redirect("index")
 
 # Dashboard utilisateur 
 def dashboardView(request):

@@ -2,6 +2,7 @@ html,
 body {
   margin: 0px;
   height: 100%;
+  box-sizing: border-box;
 }
 
 h1 {
@@ -12,13 +13,16 @@ h1 {
   text-align: center;
 }
 
+.bg-app-gradient {
+  background: #efefbb;
+  background: linear-gradient(to right, #DEF3FD, #FDDFDF);
+}
+
 .app-header {
   background-color: #282c34;
 }
 
 .app-container {
-  background: #efefbb;
-  background: linear-gradient(to right, #DEF3FD, #FDDFDF);
   text-align: center;
 }
 
@@ -57,26 +61,47 @@ h1 {
   color: black;
 }
 
+.link-to-home svg {
+  text-decoration: none;
+  color: black;
+}
+
+.link-to-home span {
+  color: black;
+}
+
 .card-img-top img {
   max-width: 35%;
 }
 
 .img-detail {
-  max-width: 40%;
+  max-width: 100%;
 }
 
 .number {
   background-color: rgba(0, 0, 0, 0.1);
   padding: 5px 10px;
-  border-radius: 10px;
+  border-radius: 0.5rem;
   font-size: 0.8em;
   font-weight: 500;
   color: black;
 }
 
+.numberOverPokemon {
+  font-size: 4rem;
+  letter-spacing: 0.3rem;
+  font-weight: 600;
+  color: rgb(0 0 0 / 53%);
+  position: absolute;
+  bottom: 30px;
+  left: 550px;
+  font-style: italic;
+}
+
 .tag {
   border-radius: 0.5rem;
-  padding: 8px 12px;
+  box-shadow: 1px 2px 4px rgb(100 100 100 / 50%);
+  padding: 5px 15px;
 }
 
 .type {
@@ -84,7 +109,7 @@ h1 {
   font-size: 0.9em;
   text-align: center;
   text-transform: uppercase;
-  color: black;
+  color: #ffff;
 }
 
 .name {
@@ -95,26 +120,26 @@ h1 {
   font-weight: 600;
 }
 
-.container-main-info {
-  display: flex;
+.nameOnDetail {
+  color: #282c34;
+  font-size: 80px;
+  font-weight: 700;
+  padding-top: 5%;
 }
 
-.pokemon-details {
-  display: flex;
-  background-color: #eee;
-  border-radius: 10px;
-  box-shadow: 0 3px 15px rgb(100 100 100 / 50%);
-  width: 50%;
-  height: 90%;
-  justify-content: center;
-  align-content: center;
-  flex-direction: column;
-  flex-wrap: wrap;
+.container-pokemon {
+  height: calc(100vh - 60px);
 }
 
-/* .pokeball-background {
-  position: absolute;
-  z-index: 1;
-  right: "20";
-  top: "50";
-} */
+.lineSeparation {
+  border-left: 1px solid #32353a;
+}
+
+.containerNameType {
+  margin-left: 20%;
+}
+
+.text-to-home {
+  font-size: 1.5rem;
+  font-weight: 500;
+}
