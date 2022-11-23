@@ -10,14 +10,13 @@ from .models import UserInfo
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 
-
+import httpx
+import asyncio
 
 # Create your views here.
 url = "https://pokeapi.co/api/v2"
 
-
-def index(request):
-    backgroundColors = {
+backgroundColors = {
             "fire": "#FDDFDF",
             "grass": "#DEFDE0",
             "electric": "#FCF7DE",
@@ -31,10 +30,13 @@ def index(request):
             "psychic": "#eaeda1",
             "flying": "#F5F5F5",
             "fighting": "#E6E0D4",
-            "normal": "#F5F5F5"
+            "normal": "#F5F5F5",
+            "ghost": "#F5F5F5",
+            "ice": "#74C1D9",
+            "dark": "#2A2725"
             }
 
-    colors = {
+colors = {
             "bug": "#8CB230",
             "dark": "#58575F",
             "dragon": "#0F6AC0",
@@ -53,46 +55,35 @@ def index(request):
             "rock": "#BAAB82",
             "steel": "#417D9A",
             "water": "#417D9A",
+            "ghost": "#F5F5F5",
+            "ice": "#B4DFEF",
+            "dark": "#5B5450"
             }
 
-    if(request.GET.get('search')):
-
-        url = "https://pokeapi.co/api/v2/pokemon/" + request.GET['search']
-        pokemonArray = []
-        for i in range(1, 2):
-            if(getPokemonById(request.GET['search']) != None):
-                pokemonArray.append(getPokemonById(request.GET['search']))
-            i += 1
-
-        if(len(pokemonArray) > 0):
-            for pokemon in pokemonArray:
-                pokemon["backgroundColor"] = backgroundColors[pokemon["types"][0]["type"]["name"]]
-                pokemon["color"] = colors[pokemon["types"][0]["type"]["name"]]
-
-        
-        return render(request, "pokedex/index.html", {'pokemons': pokemonArray})
-
-    else:
-        
-        pokemonArray = []
-        for i in range(1, 11):
-            pokemonArray.append(getPokemonById(i))
-            i += 1
-
-        for pokemon in pokemonArray:
-            pokemon["backgroundColor"] = backgroundColors[pokemon["types"][0]["type"]["name"]]
-            pokemon["color"] = colors[pokemon["types"][0]["type"]["name"]]
-
-        return render(request, "pokedex/index.html", {'pokemons': pokemonArray})
+async def index(request):
+    pokemonArray = []
     
+    async with httpx.AsyncClient() as client:
+        responses = await asyncio.gather(*[getPokemonById(i, client) for i in range(1, 31)])
+        pokemonArray.append([response for response in responses])
+
+    return render(request, "pokedex/index.html", {'pokemons': pokemonArray})
 
 
-def getPokemonById(id):
+async def getPokemonById(id, client):
     api = url + "/pokemon/" + str(id)
-    r = requests.get(api)
-    if r.status_code == 200:
-        results = r.json()
-        return results
+    r = await client.get(api)
+    
+    results = r.json()
+    pokemon = {
+        "id": results["id"],
+        "name": results["name"],
+        "img": results["sprites"]["other"]["home"]["front_default"],
+        "type": results["types"][0]["type"]["name"],
+        "color": colors[results["types"][0]["type"]["name"]],
+        "backgroundColor": backgroundColors[results["types"][0]["type"]["name"]]
+    }
+    return pokemon
 
 
 def pokemonDetails(request, id):

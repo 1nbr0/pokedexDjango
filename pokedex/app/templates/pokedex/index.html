@@ -17,26 +17,24 @@
     <h1 class="mb-2">Pokedex</h1>
     <div class="container">
       <div class="row justify-content-center">
-        {% if pokemons|length > 0 %}
-          {% for pokemon in pokemons %}
-          <div class="col-md-3 card pokemon" style="background-color: {{ pokemon.backgroundColor }}">
-            <a href="{% url 'pokemon-details' pokemon.id %}" class="link-card">
+        {% for pokemon in pokemons %}
+          {% for poke in pokemon %}
+          <div class="col-md-3 card pokemon" style="background-color: {{ poke.backgroundColor }}">
+            <a href="{% url 'pokemon-details' poke.id %}" class="link-card">
               <div class="card-img-top">
-                <img src="{{ pokemon.sprites.other.home.front_default }}" alt="{{ pokemon.name }}" ">
+                <img src="{{ poke.img }}" alt="{{ poke.name }}" loading="lazy">
               </div>
               <div class='card-body'>
-                <span class="number">N°{{ pokemon.id|stringformat:"03d" }}</span>
-                <h3 class="name">{{ pokemon.name|title }}</h3>
-                <small class="tag" style="background-color: {{ pokemon.color }}">
-                  <span class="type">{{ pokemon.types.0.type.name }}</span>
+                <span class="number">N°{{ poke.id|stringformat:"03d" }}</span>
+                <h3 class="name">{{ poke.name|title }}</h3>
+                <small class="tag" style="background-color: {{ poke.color }}">
+                  <span class="type">{{ poke.type }}</span>
                 </small>
               </div>
             </a>
           </div>
           {% endfor %}
-        {% else %}
-            <p>Aucun pokémon</p>
-        {% endif %}
+        {% endfor %}
         
       </div>
     </div>
