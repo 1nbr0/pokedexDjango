@@ -17,6 +17,7 @@
     <h1 class="mb-2">Pokedex</h1>
     <div class="container">
       <div class="row justify-content-center">
+        {% if pokemons|length > 0 %}
         {% for pokemon in pokemons %}
           {% for poke in pokemon %}
           <div class="col-md-3 card pokemon" style="background-color: {{ poke.backgroundColor }}">
@@ -35,6 +36,9 @@
           </div>
           {% endfor %}
         {% endfor %}
+        {% else %}
+            <p>Aucun pokémon</p>
+        {% endif %}
       </div>
     </div>
   </main>

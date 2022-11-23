@@ -61,13 +61,27 @@ colors = {
             }
 
 async def index(request):
-    pokemonArray = []
-    
-    async with httpx.AsyncClient() as client:
-        responses = await asyncio.gather(*[getPokemonByIdAsync(i, client) for i in range(1, 31)])
-        pokemonArray.append([response for response in responses])
+    if(request.GET.get('search')):
 
-    return render(request, "pokedex/index.html", {'pokemons': pokemonArray})
+        pokemonArray = []
+        try:
+            async with httpx.AsyncClient() as client:
+                responses = await asyncio.gather(*[getPokemonByIdAsync(request.GET['search'].lower(), client) for i in range(1, 2)])
+                pokemonArray.append([response for response in responses])
+        except:
+            pokemonArray = []
+            return render(request, "pokedex/index.html", {'pokemons': pokemonArray})
+        
+        return render(request, "pokedex/index.html", {'pokemons': pokemonArray})
+
+    else:
+        pokemonArray = []
+        
+        async with httpx.AsyncClient() as client:
+            responses = await asyncio.gather(*[getPokemonByIdAsync(i, client) for i in range(1, 31)])
+            pokemonArray.append([response for response in responses])
+
+        return render(request, "pokedex/index.html", {'pokemons': pokemonArray})
 
 
 async def getPokemonByIdAsync(id, client):
