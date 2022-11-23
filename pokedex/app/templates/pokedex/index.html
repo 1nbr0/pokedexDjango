@@ -11,9 +11,9 @@
   <link rel="stylesheet" type="text/css" href="{% static 'pokedex/css/pokemon.css' %}" />
   <title>Pokedex</title>
 </head>
-<body class="app">
+<body class="app bg-app-gradient">
   {% include "./navigation/header.html" %}
-  <div class="app-container grid">
+  <main class="app-container">
     <h1 class="mb-2">Pokedex</h1>
     <div class="container">
       <div class="row justify-content-center">
@@ -35,11 +35,11 @@
           </div>
           {% endfor %}
         {% else %}
-            <p>Aucun pokémon</p>
+            <h2>Aucun pokémon</h2>
         {% endif %}
         
       </div>
     </div>
-  </div>
+  </main>
 </body>
 </html>
