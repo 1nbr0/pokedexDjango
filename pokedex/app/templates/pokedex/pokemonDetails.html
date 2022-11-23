@@ -46,6 +46,11 @@
             </div>
           </div>
         </div>
+        <form action="{% url 'addPokemon' %}" method="post">
+          {% csrf_token %}
+          <input name="id" type="hidden" value={{pokemon.id}}>
+          <button type="submit">Ajouter</button>
+        </form>
       </div>
     {% endfor %}
   </div>
