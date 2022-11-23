@@ -14,7 +14,7 @@ import httpx
 import asyncio
 
 # Create your views here.
-url = "https://pokeapi.co/api/v2"
+url = "https://pokeapi.co/api/v2/pokemon/"
 
 backgroundColors = {
             "fire": "#FDDFDF",
@@ -64,14 +64,14 @@ async def index(request):
     pokemonArray = []
     
     async with httpx.AsyncClient() as client:
-        responses = await asyncio.gather(*[getPokemonById(i, client) for i in range(1, 31)])
+        responses = await asyncio.gather(*[getPokemonByIdAsync(i, client) for i in range(1, 31)])
         pokemonArray.append([response for response in responses])
 
     return render(request, "pokedex/index.html", {'pokemons': pokemonArray})
 
 
-async def getPokemonById(id, client):
-    api = url + "/pokemon/" + str(id)
+async def getPokemonByIdAsync(id, client):
+    api = url + str(id)
     r = await client.get(api)
     
     results = r.json()
@@ -85,6 +85,12 @@ async def getPokemonById(id, client):
     }
     return pokemon
 
+def getPokemonById(id):
+    api = url + str(id)
+    r = requests.get(api)
+    if r.status_code == 200:
+        results = r.json()
+        return results
 
 def pokemonDetails(request, id):
     pokemonDetails = []
