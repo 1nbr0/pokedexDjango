@@ -9,6 +9,7 @@
   <link rel="shortcut icon" type="image/svg" href="{% static 'images/logo.svg' %}"/>
   <link rel="stylesheet" type="text/css" href="{% static 'pokedex/css/bootstrap.css' %}" />
   <link rel="stylesheet" type="text/css" href="{% static 'pokedex/css/pokemon.css' %}" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
   {% for pokemon in pokemons %}
     <title>Pokedex - {{ pokemon.name }}</title>
   {% endfor %}
@@ -27,7 +28,7 @@
       <div class="container-pokemon" style="background-color: {{ pokemon.backgroundColor }}">
         <div class="d-flex flex-row flex-nowrap justify-content-between align-items-center h-100">
           <div class="d-flex flex-column flex-nowrap justify-content-between h-100 w-50">
-            <div class="d-flex flex-column flex-nowrap justify-content-center align-items-start h-100 containerNameType">
+            <div class="d-flex flex-column flex-nowrap justify-content-center align-items-start h-100 containerNameType animate__animated animate__fadeInLeft animate__slow">
               <h2 class="nameOnDetail">{{ pokemon.name|title }}</h2>
               <small class="tag" style="background-color: {{ pokemon.color }}">
                 <span class="type">{{ pokemon.types.0.type.name }}</span>
@@ -36,13 +37,13 @@
             <div class="h-100 mb-3">
               <div class="img-container">
                 <img src="{{ pokemon.sprites.other.home.front_default }}" alt="{{ pokemon.name }}" class="img-detail">
-                <span class="numberOverPokemon">#{{ pokemon.id|stringformat:"03d" }}</span>
+                <span class="numberOverPokemon animate__animated animate__fadeInUp animate__slow">#{{ pokemon.id|stringformat:"03d" }}</span>
               </div>
             </div>
           </div>
           <div class="d-flex justify-content-center align-items-center h-100 w-50">
             <div class="lineSeparation h-75 w-75">
-              <h2>info secondaire</h2>
+              <h2 class="animate__animated animate__fadeInRight animate__slow">info secondaire</h2>
             </div>
           </div>
         </div>

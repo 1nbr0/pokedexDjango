@@ -1,21 +1,22 @@
 <!DOCTYPE html>
-{% load static %}
 
 <html lang="en">
-<head>
+  <head>
+  {% load static %}
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="shortcut icon" type="image/svg" href="{% static 'images/logo.svg' %}"/>
   <link rel="stylesheet" type="text/css" href="{% static 'pokedex/css/bootstrap.css' %}" />
   <link rel="stylesheet" type="text/css" href="{% static 'pokedex/css/pokemon.css' %}" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
   <title>Pokedex</title>
 </head>
 <body class="app bg-app-gradient">
   {% include "./navigation/header.html" %}
   <main class="app-container">
-    <h1 class="mb-2">Pokedex</h1>
-    <div class="container">
+    <h1 class="mb-2">PokeDex</h1>
+    <div class="container animate__animated animate__zoomIn animate__slow">
       <div class="row justify-content-center">
         {% if pokemons|length > 0 %}
         {% for pokemon in pokemons %}
@@ -37,11 +38,11 @@
           {% endfor %}
         {% endfor %}
         {% else %}
-        {% if error|length > 0 %}
-        {{error}}
-        {% else %}
+          {% if error|length > 0 %}
+            {{error}}
+          {% else %}
             <p>Aucun pokémon</p>
-        {% endif %}
+          {% endif %}
         {% endif %}
       </div>
     </div>
