@@ -2,14 +2,13 @@
   <div class="container-fluid">
     <a class="navbar-brand" href="{% url 'index' %}">
       <img src="../../../static/images/logo.svg" alt="Logo" width="30" height="24" class="d-inline-block align-text-top">
-      <span>P<img src="../../../static/images/o-pokedex.png" alt="o de pokedex">kedex</span>
+      <span>P<img src="../../../static/images/o-pokedex.png" alt="o de pokedex">keDex</span>
     </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse justify-content-between" id="navbarNavAltMarkup">
       <div class="navbar-nav">
-        <a class="nav-link active" aria-current="page" href="{% url 'index' %}">Home</a>
         <a class="nav-link" href="{% url 'team' %}">
           <img src="../../../static/images/pokeballs.png" alt="teams" width="24" height="24">
           Equipes
@@ -24,6 +23,11 @@
           </span>
         </button>
       </form>
+      <div class="navbar-nav">
+        <a class="nav-link" href="{% url 'login' %}">
+          Connexion
+        </a>
+      </div>
     </div>
   </div>
 </nav>

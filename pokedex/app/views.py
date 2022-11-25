@@ -33,7 +33,7 @@ backgroundColors = {
             "normal": "#F5F5F5",
             "ghost": "#F5F5F5",
             "ice": "#74C1D9",
-            "dark": "#2A2725"
+            "dark": "#848484",
             }
 
 colors = {
@@ -55,13 +55,11 @@ colors = {
             "rock": "#BAAB82",
             "steel": "#417D9A",
             "water": "#417D9A",
-            "ghost": "#F5F5F5",
-            "ice": "#B4DFEF",
-            "dark": "#5B5450"
             }
 
+
 async def index(request):
-    if(request.GET.get('search')):
+    if (request.GET.get('search')):
 
         pokemonArray = []
         try:
@@ -71,7 +69,7 @@ async def index(request):
         except:
             pokemonArray = []
             return render(request, "pokedex/index.html", {'pokemons': pokemonArray})
-        
+
         return render(request, "pokedex/index.html", {'pokemons': pokemonArray})
 
     else:
@@ -79,22 +77,22 @@ async def index(request):
         error = ""
         try:
             async with httpx.AsyncClient() as client:
-                responses = await asyncio.gather(*[getPokemonByIdAsync(i, client) for i in range(1, 2001)])
+                responses = await asyncio.gather(*[getPokemonByIdAsync(i, client) for i in range(1, 20)])
             pokemonArray.append([response for response in responses])
 
             context = {
                 'pokemons': pokemonArray,
-                'error' : error
+                'error': error
 
             }
-            return render(request, "pokedex/index.html", {'pokemons': context})
+            return render(request, "pokedex/index.html", context)
         except:
 
             pokemonArray = []
             error = "ERREUR : Veuillez choisir une meilleure connexion."
             context = {
                 'pokemons': pokemonArray,
-                'error' : error
+                'error': error
 
             }
             return render(request, "pokedex/index.html", context)
@@ -103,7 +101,7 @@ async def index(request):
 async def getPokemonByIdAsync(id, client):
     api = url + str(id)
     r = await client.get(api)
-    
+
     results = r.json()
     pokemon = {
         "id": results["id"],
@@ -115,12 +113,14 @@ async def getPokemonByIdAsync(id, client):
     }
     return pokemon
 
+
 def getPokemonById(id):
     api = url + str(id)
     r = requests.get(api)
     if r.status_code == 200:
         results = r.json()
         return results
+
 
 def pokemonDetails(request, id):
     pokemonDetails = []
@@ -141,7 +141,10 @@ def pokemonDetails(request, id):
         "psychic": "#eaeda1",
         "flying": "#F5F5F5",
         "fighting": "#E6E0D4",
-        "normal": "#F5F5F5"
+        "normal": "#F5F5F5",
+        "ghost": "#F5F5F5",
+        "ice": "#74C1D9",
+        "dark": "#848484",
         }
 
     colors = {
@@ -176,10 +179,11 @@ def pokemonDetails(request, id):
 
 # Gestion des équipes
 
+
 # Modifier le titre de l'équipe actuelle
 def updateTeamTitle(request):
     if request.user.is_authenticated:
-        if(request.POST.get('title')):
+        if (request.POST.get('title')):
             userInfo = UserInfo.objects.get(user=request.user)
             userCurrentTeam = PokeTeam.objects.get(id=userInfo.currentTeam)
             userCurrentTeam.title = request.POST['title']
@@ -192,102 +196,101 @@ def updateTeamTitle(request):
 # Ajoute un pokémon dans l'équipe d'un utilisateur
 def addPokemonInCurrentTeam(request):
     if request.user.is_authenticated:
-        if(request.POST.get('id')):
+        if (request.POST.get('id')):
             userInfo = UserInfo.objects.get(user=request.user)
             userCurrentTeam = PokeTeam.objects.get(id=userInfo.currentTeam)
-            if(userCurrentTeam.idPokemon1 == None):
+            if (userCurrentTeam.idPokemon1 is None):
                 userCurrentTeam.idPokemon1 = request.POST.get('id')
                 userCurrentTeam.save()
-            elif(userCurrentTeam.idPokemon2 == None):
+            elif (userCurrentTeam.idPokemon2 is None):
                 userCurrentTeam.idPokemon2 = request.POST.get('id')
                 userCurrentTeam.save()
-            elif(userCurrentTeam.idPokemon3 == None):
+            elif (userCurrentTeam.idPokemon3 is None):
                 userCurrentTeam.idPokemon3 = request.POST.get('id')
                 userCurrentTeam.save()
-            elif(userCurrentTeam.idPokemon4 == None):
+            elif (userCurrentTeam.idPokemon4 is None):
                 userCurrentTeam.idPokemon4 = request.POST.get('id')
                 userCurrentTeam.save()
-            elif(userCurrentTeam.idPokemon5 == None):
+            elif (userCurrentTeam.idPokemon5 is None):
                 userCurrentTeam.idPokemon5 = request.POST.get('id')
                 userCurrentTeam.save()
-            if((userCurrentTeam.idPokemon1 != None) and (userCurrentTeam.idPokemon2 != None) and (userCurrentTeam.idPokemon3 != None) and (userCurrentTeam.idPokemon4 != None) and (userCurrentTeam.idPokemon5 != None)):
+            if ((userCurrentTeam.idPokemon1 is not None) and (userCurrentTeam.idPokemon2 != None) and (userCurrentTeam.idPokemon3 != None) and (userCurrentTeam.idPokemon4 != None) and (userCurrentTeam.idPokemon5 != None)):
                 return redirect('dashboard')
-            
         return redirect('index')
     else:
         return redirect('login')
 
+
 # Retirer un pokemon dans l'équipe d'un utilisateur
 def removePokemonInCurrentTeam(request):
     if request.user.is_authenticated:
-        if(request.POST.get('idPokemon')):
+        if (request.POST.get('idPokemon')):
             idPokemon = request.POST['idPokemon']
             userInfo = UserInfo.objects.get(user=request.user)
             userCurrentTeam = PokeTeam.objects.get(id=userInfo.currentTeam)
-            if(idPokemon == "1"):
+            if (idPokemon == "1"):
                 userCurrentTeam.idPokemon1 = None
                 userCurrentTeam.save()
-            elif(idPokemon == "2"):
+            elif (idPokemon == "2"):
                 userCurrentTeam.idPokemon2 = None
                 userCurrentTeam.save()
-            elif(idPokemon == "3"):
+            elif (idPokemon == "3"):
                 userCurrentTeam.idPokemon3 = None
                 userCurrentTeam.save()
-            elif(idPokemon == "4"):
+            elif (idPokemon == "4"):
                 userCurrentTeam.idPokemon4 = None
                 userCurrentTeam.save()
-            elif(idPokemon == "5"):
+            elif (idPokemon == "5"):
                 userCurrentTeam.idPokemon5 = None
                 userCurrentTeam.save()
-            
         return redirect('dashboard')
     else:
         return redirect('login')
+
 
 # Publier une équipe
 def createTeam(request):
     if request.user.is_authenticated:
         userInfo = UserInfo.objects.get(user=request.user)
         userCurrentTeam = PokeTeam.objects.get(id=userInfo.currentTeam)
-        if((userCurrentTeam.title != None) and (userCurrentTeam.idPokemon1 != None) and (userCurrentTeam.idPokemon2 != None) and (userCurrentTeam.idPokemon3 != None) and (userCurrentTeam.idPokemon4 != None) and (userCurrentTeam.idPokemon5 != None)):
+        if ((userCurrentTeam.title is not None) and (userCurrentTeam.idPokemon1 is not None) and (userCurrentTeam.idPokemon2 is not None) and (userCurrentTeam.idPokemon3 is not None) and (userCurrentTeam.idPokemon4 is not None) and (userCurrentTeam.idPokemon5 is not None)):
             userCurrentTeam.publish = True
             userCurrentTeam.save()
             poketeam = PokeTeam.objects.create(user=request.user, publish=False)
             poketeam.save()
             userInfo.currentTeam = poketeam.id
             userInfo.save()
-            
         return redirect('dashboard')
     else:
         return redirect('login')
 
+
 # Supprimer une équipe
 def removeTeam(request):
     if request.user.is_authenticated:
-        if(request.POST.get('id')):
+        if (request.POST.get('id')):
             team = PokeTeam.objects.get(id=request.POST['id'], user=request.user).delete()
         return redirect('dashboard')
     else:
         return redirect('login')
+
 
 # Affiche toutes les équipes publier
 def pokemonTeamView(request):
     team_list = PokeTeam.objects.all().exclude(publish=False)
     full_team = []
     for team in team_list:
-         full_team.append(team) 
+        full_team.append(team)
 
     context = {
-        'team_list' : full_team
+        'team_list': full_team
     }
     return render(request, 'pokedex/pokemonTeam.html', context)
 
-
-
 # Compte utilisateur
 
-# Register d'un utilisateur
 
+# Register d'un utilisateur
 def RegisterView(request):
     if request.user.is_authenticated:
         return redirect("index")
@@ -306,10 +309,11 @@ def RegisterView(request):
         else:
             return render(request, 'pokedex/account/register.html')
 
+
 # Login utilisateur
 def LoginView(request):
     if (request.user.is_authenticated):
-        return redirect("dashboard")
+        return redirect("index")
     else:
         if (request.POST.get('username') and request.POST.get('password')):
             username = request.POST['username']
@@ -317,17 +321,19 @@ def LoginView(request):
             user = authenticate(request, username=username, password=password)
             if user is not None:
                 login(request, user)
-                return redirect("dashboard")
+                return redirect("index")
             else:
                 context = {'errors': 'User Not Found'}
                 return render(request, 'pokedex/account/login.html', context)
         else:
             return render(request, 'pokedex/account/login.html')
 
+
 # Déconnexion
 def LogoutView(request):
     logout(request)
     return redirect("index")
+
 
 # Dashboard utilisateur 
 def dashboardView(request):
@@ -336,8 +342,8 @@ def dashboardView(request):
         currentTeam = PokeTeam.objects.get(id=userInfo.currentTeam)
         fullTeam = PokeTeam.objects.all().filter(user=request.user).exclude(publish=False)
         context = { 
-            'currentTeam' : currentTeam,
-            'fullTeam' : fullTeam 
+            'currentTeam': currentTeam,
+            'fullTeam': fullTeam,
         }
         return render(request, 'pokedex/account/dashboard.html', context)
     else:

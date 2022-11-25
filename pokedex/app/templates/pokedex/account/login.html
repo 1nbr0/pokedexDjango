@@ -1,20 +1,50 @@
 <!DOCTYPE html>
+{% load static %}
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <link rel="shortcut icon" type="image/svg" href="{% static 'images/logo.svg' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'pokedex/css/bootstrap.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'pokedex/css/pokemon.css' %}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <title>Connexion</title>
 </head>
-<body>
-        {% if errors %}
-            {{ errors }}
-        {% endif %}
-    <form action="{% url 'login' %}" method="post">
-        {% csrf_token %}
-        <input type="text" name="username" required>
-        <input type="password" name="password" required>
-        <button type="submit">Login</button>
-    </form>
+<body class="bg-login">
+    <main class="d-flex flex-row align-items-center h-100">
+        <div class="d-flex flex-column flex-nowrap justify-content-center align-items-center animate__animated animate__fadeInLeft animate__slow login-box">
+            <div class="h-75 d-flex align-items-center">
+                <h1>P<img src="../../../static/images/icons-pokéball-32.png" alt="o de pokedex">keDex</h1>
+            </div>
+            {% if errors %}
+                {{ errors }}
+            {% endif %}
+            <div class="h-100">
+                <h2 class="mb-3">Connexion</h2>
+                <form action="{% url 'login' %}" method="post">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="InputUsername" class="form-label">Identifiant</label>
+                        <input type="username" name="username" id="InputUsername" required class="form-control" aria-label="username">
+                        <div id="emailHelp" class="form-text">Nous ne partagerons jamais votre identifiant avec qui que ce soit.</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="InputPassword" class="form-label">Mot de passe</label>
+                        <input type="password" name="password" id="InputPassword" required class="form-control" aria-label="password">
+                    </div>
+                    <button type="submit" class="btn btn-danger">Connexion</button>
+                </form>
+            </div>
+            <div class="d-flex flex-row flex-wrap justify-content-center align-content-around w-100 h-100">
+                <h3 class="form-text me-3">Vous n'avez pas de compte ? Inscrivez-vous ici.</h3>
+                <a href="{% url 'register' %}" class="hover-underline-animation">Inscription</a>
+            </div>
+        </div>
+        <div>
+            <img src="" alt="">
+        </div>
+    </main>
 </body>
 </html>
