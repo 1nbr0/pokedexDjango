@@ -37,7 +37,11 @@
           {% endfor %}
         {% endfor %}
         {% else %}
+        {% if error|length > 0 %}
+        {{error}}
+        {% else %}
             <p>Aucun pokémon</p>
+        {% endif %}
         {% endif %}
       </div>
     </div>

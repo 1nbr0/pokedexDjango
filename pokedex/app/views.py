@@ -76,12 +76,28 @@ async def index(request):
 
     else:
         pokemonArray = []
-        
-        async with httpx.AsyncClient() as client:
-            responses = await asyncio.gather(*[getPokemonByIdAsync(i, client) for i in range(1, 31)])
+        error = ""
+        try:
+            async with httpx.AsyncClient() as client:
+                responses = await asyncio.gather(*[getPokemonByIdAsync(i, client) for i in range(1, 2001)])
             pokemonArray.append([response for response in responses])
 
-        return render(request, "pokedex/index.html", {'pokemons': pokemonArray})
+            context = {
+                'pokemons': pokemonArray,
+                'error' : error
+
+            }
+            return render(request, "pokedex/index.html", {'pokemons': context})
+        except:
+
+            pokemonArray = []
+            error = "ERREUR : Veuillez choisir une meilleure connexion."
+            context = {
+                'pokemons': pokemonArray,
+                'error' : error
+
+            }
+            return render(request, "pokedex/index.html", context)
 
 
 async def getPokemonByIdAsync(id, client):
