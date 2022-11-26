@@ -115,17 +115,11 @@ async def index(request):
                 responses = await asyncio.gather(*[getPokemonByIdAsync(pokemon['name'], client) for pokemon in pokemonOnPage])
                 for response in responses:
                     pokemonArray.append(response)
-
-            context = {
-                'pokemons': pokemonArray,
-                'error': error,
-                'is_authenticated': await sync_to_async(lambda: request.user.is_authenticated)(),
-            }
             return render(request, "pokedex/index.html", context)
         except:
             pokemonArray = []
             error = "ERREUR : Si le problème persiste, essayer de changer de connexion."
-            return render(request, "pokedex/index.html", {'pokemonOnPage': pokemonOnPage, 'is_authenticated': await sync_to_async(lambda: request.user.is_authenticated)()})
+            return render(request, "pokedex/index.html", context)
 
 
 async def getPagination(urlPage, client):
@@ -133,6 +127,7 @@ async def getPagination(urlPage, client):
     results = r.json()
     pagination = {"next": results["next"], "previous": results["previous"]}
     return pagination
+
 
 async def getPokemonPageAsync(client, urlPage):
     r = await client.get(f'{urlPage}')
@@ -324,7 +319,7 @@ def removeTeam(request):
 
 # Affiche toutes les équipes publier
 def pokemonTeamView(request):
-    teams = PokeTeam.objects.all().exclude(publish=False)
+    teams = PokeTeam.objects.all().exclude(publish=False).order_by('-id')
     full_team = []
 
     for team in teams:
@@ -341,6 +336,7 @@ def pokemonTeamView(request):
 
     context = {'user': request.user.is_authenticated, 'team_list': full_team}
     return render(request, 'pokedex/pokemonTeam.html', context)
+
 # Compte utilisateur
 
 
@@ -407,10 +403,11 @@ def dashboardView(request):
             }
             current_team.append(newTeam)
 
-        teams = PokeTeam.objects.filter(user=request.user).exclude(publish=False)
+        teams = PokeTeam.objects.filter(user=request.user).exclude(publish=False).order_by('-id')
         full_team = []
         for team in teams:
             newTeam = {
+                'id': team.id,
                 'author': team.user,
                 'title': team.title,
                 'pokemon1': getPokemonInDB(team.idPokemon1),

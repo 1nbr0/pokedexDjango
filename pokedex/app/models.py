@@ -3,12 +3,14 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 
-#Extension de user pour mettre la currentteam
+
+# Extension de user pour mettre la currentteam
 class UserInfo(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     currentTeam = models.IntegerField(blank=True, null=True, unique=True)
 
-#Les équipes de pokémon
+
+# Les équipes de pokémon
 class PokeTeam(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     title = models.CharField(blank=True, null=True, max_length=100)
@@ -20,7 +22,7 @@ class PokeTeam(models.Model):
     publish = models.BooleanField(blank=True, null=True)
 
 
-#Pokémon
+# Pokémon
 class Pokemon(models.Model):
     idPokemon = models.IntegerField(blank=True, null=True)
     name = models.CharField(blank=True, null=True, max_length=100)

@@ -216,8 +216,23 @@ h1 {
 .card-pokemon-team {
   width: 280px;
   height: 160px;
-  background-color: #e11d48;
   box-shadow: 0 3px 15px rgba(100, 100, 100, 0.5);
   border-radius: 1rem;
   margin: 8px;
+}
+
+/* BTN AJOUT TEAM */
+
+.btn-add-team {
+  position: fixed;
+  float: right;
+  top: 10%;
+  right: 5%;
+}
+
+.btn-add-team form button {
+  color: #fff;
+  font-weight: bold;
+  font-size: 0.9em;
+  box-shadow: 1px 2px 4px rgb(100 100 100 / 50%);
 }
