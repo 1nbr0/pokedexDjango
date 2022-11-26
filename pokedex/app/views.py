@@ -170,7 +170,10 @@ def getPokemonById(id):
 
 def pokemonDetails(request, id):
     pokemonDetails = []
-
+    id = id
+    if (request.POST.get('id')):
+        id = request.POST.get('id')
+        
     pokemonDetails.append(getPokemonById(id))
 
     backgroundColors = {
