@@ -20,23 +20,22 @@
       <div class="row justify-content-center">
         {% if pokemons|length > 0 %}
         {% for pokemon in pokemons %}
-          {% for poke in pokemon %}
-          <div class="col-md-3 card pokemon" style="background-color: {{ poke.backgroundColor }}">
-            <a href="{% url 'pokemon-details' poke.id %}" class="link-card">
+          <div class="col-md-3 card pokemon" style="background-color: {{ pokemon.backgroundColor }}">
+            <a href="{% url 'pokemon-details' pokemon.id %}" class="link-card">
               <div class="card-img-top">
-                <img src="{{ poke.img }}" alt="{{ poke.name }}" loading="lazy">
+                <img src="{{ pokemon.img }}" alt="{{ pokemon.name }}" loading="lazy">
               </div>
               <div class='card-body'>
-                <span class="number">N°{{ poke.id|stringformat:"03d" }}</span>
-                <h3 class="name">{{ poke.name|title }}</h3>
-                <small class="tag" style="background-color: {{ poke.color }}">
-                  <span class="type">{{ poke.type }}</span>
+                <span class="number">N°{{ pokemon.id|stringformat:"03d" }}</span>
+                <h3 class="name">{{ pokemon.name|title }}</h3>
+                <small class="tag" style="background-color: {{ pokemon.color }}">
+                  <span class="type">{{ pokemon.type }}</span>
                 </small>
               </div>
             </a>
           </div>
           {% endfor %}
-        {% endfor %}
+
         {% else %}
           {% if error|length > 0 %}
             {{error}}
@@ -46,6 +45,39 @@
         {% endif %}
       </div>
     </div>
+    {% if search is True %}
+      {% if error|length is 0 %}
+    <div class="pagination d-flex justify-content-around pb-5 pt-4">
+        {% if pagination.previous|length > 0 %}
+          <form method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="previous" value="{{pagination.previous}}">
+            <button type="button submit" class="btn btn-outline-primary btn-lg">Précédent</button>
+          </form>
+        {% else %}
+          <form method="POST" >
+            {% csrf_token %}
+            <input type="hidden" name="previous" value="{{pagination.previous}}">
+            <button type="button submit" class="btn btn-outline-secondary btn-lg" disabled>Précédent</button>
+          </form>
+        {% endif %}
+
+        {% if pagination.next|length > 0 %}
+          <form method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="next" value="{{pagination.next}}">
+            <button type="button submit" class="btn btn-outline-primary btn-lg">Suivant</button>
+          </form>
+        {% else %}
+          <form method="POST" >
+            {% csrf_token %}
+            <input type="hidden" name="next" value="{{pagination.next}}">
+            <button type="button submit" class="btn btn-outline-secondary btn-lg" disabled>Suivant</button>
+          </form>
+        {% endif %}
+      </div>
+ {% endif %}
+{% endif %}
   </main>
 </body>
 </html>
