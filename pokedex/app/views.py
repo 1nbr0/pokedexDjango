@@ -15,7 +15,6 @@ from asgiref.sync import sync_to_async
 import httpx
 import asyncio
 from asgiref.sync import sync_to_async
-from time import sleep
 
 # Create your views here.
 url = "https://pokeapi.co/api/v2/pokemon/"
@@ -211,8 +210,18 @@ def pokemonDetails(request, id):
     for pokemon in pokemonDetails:
         pokemon["backgroundColor"] = backgroundColors[pokemon["types"][0]["type"]["name"]]
         pokemon["color"] = colors[pokemon["types"][0]["type"]["name"]]
+    Next = 1
+    if(id is 1000):
+        Next = 1000
+    else:
+        Next = id + 1
+    Previous = 1
+    if(id is 1):
+        Previous = 1
+    else:
+        Previous = id - 1
+    return render(request, "pokedex/pokemonDetails.html", {'pokemons': pokemonDetails, 'Previous': Previous, 'Next': Next})
 
-    return render(request, "pokedex/pokemonDetails.html", {'pokemons': pokemonDetails})
 
 # Gestion des équipes
 

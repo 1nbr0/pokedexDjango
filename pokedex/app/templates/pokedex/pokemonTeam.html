@@ -28,12 +28,12 @@
                             <div class="d-flex flex-row flex-wrap justify-content-center">
                                 {% for pokemon in team.pokemon1 %}
                                 <div class="col-md-3 card pokemon" style="background-color: {{ pokemon.backgroundColor }}">
-                                    <a href="{% url 'pokemon-details' pokemon.id %}" class="link-card">
+                                    <a href="{% url 'pokemon-details' pokemon.idPokemon %}" class="link-card">
                                         <div class="card-img-top">
                                             <img src="{{ pokemon.img }}" alt="{{ pokemon.name }}" loading="lazy">
                                         </div>
                                         <div class='card-body'>
-                                            <span class="number">N°{{ pokemon.id|stringformat:"03d" }}</span>
+                                            <span class="number">N°{{ pokemon.idPokemon|stringformat:"03d" }}</span>
                                             <h3 class="name">{{ pokemon.name|title }}</h3>
                                             <small class="tag" style="background-color: {{ pokemon.color }}">
                                                 <span class="type">{{ pokemon.type }}</span>
@@ -44,12 +44,12 @@
                                 {% endfor %}
                                 {% for pokemon in team.pokemon2 %}
                                 <div class="col-md-3 card pokemon" style="background-color: {{ pokemon.backgroundColor }}">
-                                    <a href="{% url 'pokemon-details' pokemon.id %}" class="link-card">
+                                    <a href="{% url 'pokemon-details' pokemon.idPokemon %}" class="link-card">
                                         <div class="card-img-top">
                                             <img src="{{ pokemon.img }}" alt="{{ pokemon.name }}" loading="lazy">
                                         </div>
                                         <div class='card-body'>
-                                            <span class="number">N°{{ pokemon.id|stringformat:"03d" }}</span>
+                                            <span class="number">N°{{ pokemon.idPokemon|stringformat:"03d" }}</span>
                                             <h3 class="name">{{ pokemon.name|title }}</h3>
                                             <small class="tag" style="background-color: {{ pokemon.color }}">
                                                 <span class="type">{{ pokemon.type }}</span>
@@ -60,12 +60,12 @@
                                 {% endfor %}
                                 {% for pokemon in team.pokemon3 %}
                                 <div class="col-md-3 card pokemon" style="background-color: {{ pokemon.backgroundColor }}">
-                                    <a href="{% url 'pokemon-details' pokemon.id %}" class="link-card">
+                                    <a href="{% url 'pokemon-details' pokemon.idPokemon %}" class="link-card">
                                         <div class="card-img-top">
                                             <img src="{{ pokemon.img }}" alt="{{ pokemon.name }}" loading="lazy">
                                         </div>
                                         <div class='card-body'>
-                                            <span class="number">N°{{ pokemon.id|stringformat:"03d" }}</span>
+                                            <span class="number">N°{{ pokemon.idPokemon|stringformat:"03d" }}</span>
                                             <h3 class="name">{{ pokemon.name|title }}</h3>
                                             <small class="tag" style="background-color: {{ pokemon.color }}">
                                                 <span class="type">{{ pokemon.type }}</span>
@@ -76,12 +76,12 @@
                                 {% endfor %}
                                 {% for pokemon in team.pokemon4 %}
                                 <div class="col-md-3 card pokemon" style="background-color: {{ pokemon.backgroundColor }}">
-                                    <a href="{% url 'pokemon-details' pokemon.id %}" class="link-card">
+                                    <a href="{% url 'pokemon-details' pokemon.idPokemon %}" class="link-card">
                                         <div class="card-img-top">
                                             <img src="{{ pokemon.img }}" alt="{{ pokemon.name }}" loading="lazy">
                                         </div>
                                         <div class='card-body'>
-                                            <span class="number">N°{{ pokemon.id|stringformat:"03d" }}</span>
+                                            <span class="number">N°{{ pokemon.idPokemon|stringformat:"03d" }}</span>
                                             <h3 class="name">{{ pokemon.name|title }}</h3>
                                             <small class="tag" style="background-color: {{ pokemon.color }}">
                                                 <span class="type">{{ pokemon.type }}</span>
@@ -92,12 +92,12 @@
                                 {% endfor %}
                                 {% for pokemon in team.pokemon5 %}
                                 <div class="col-md-3 card pokemon" style="background-color: {{ pokemon.backgroundColor }}">
-                                    <a href="{% url 'pokemon-details' pokemon.id %}" class="link-card">
+                                    <a href="{% url 'pokemon-details' pokemon.idPokemon %}" class="link-card">
                                         <div class="card-img-top">
                                             <img src="{{ pokemon.img }}" alt="{{ pokemon.name }}" loading="lazy">
                                         </div>
                                         <div class='card-body'>
-                                            <span class="number">N°{{ pokemon.id|stringformat:"03d" }}</span>
+                                            <span class="number">N°{{ pokemon.idPokemon|stringformat:"03d" }}</span>
                                             <h3 class="name">{{ pokemon.name|title }}</h3>
                                             <small class="tag" style="background-color: {{ pokemon.color }}">
                                                 <span class="type">{{ pokemon.type }}</span>
