@@ -27,6 +27,20 @@
           </svg>
         </a>
       </div>
+      <div class="position-fixed float-start mt-3 ms-3" style="top:50%; left:96%;">
+        <a href="{% url 'pokemon-details' Next %}" class="link-to-home">
+          <span class="material-icons">
+            arrow_forward_ios
+          </span>
+        </a>
+      </div>
+      <div class="position-fixed float-end mt-3 ms-3" style="top:50%;">
+        <a href="{% url 'pokemon-details' Previous %}" class="link-to-home">
+          <span class="material-icons">
+            arrow_back_ios
+          </span>
+        </a>
+      </div>
       <div class="container-pokemon" style="background-color: {{ pokemon.backgroundColor }}">
         <div class="d-flex flex-row flex-nowrap justify-content-between align-items-center h-100">
           <div class="d-flex flex-column flex-nowrap justify-content-between h-100 w-50">
