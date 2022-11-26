@@ -19,143 +19,271 @@
             <h1 class="mb-2">Profil de {{user}}</h1>
             <div class="d-flex flex-column flex-nowrap align-items-center">
               <h2>Équipe en cours de création</h2>
+              {% for teams in current_team %}
                 <div class="card-team">
-                    <div class="text-start">
-                      <h3>Nom de l'équipe</h3>
-                      <form action="{% url 'updateTeamTitle' %}" method="POST" class="d-flex no-block col-md-12">
-                        {% csrf_token %}
-                        {% if currentTeam.title == None %}
-                          <input class="form-control" type="text" name="title" placeholder="Renseigner le nom de votre équipe">
-                        {% else %}
-                          <input class="form-control" type="text" name="title" value="{{currentTeam.title}}">
-                        {% endif %}
-                        <button type="submit" class="btn btn-primary ms-3">Modifier</button>
-                      </form>
-                    </div>
-                    <div class="container p-4">
-                        <div class="d-flex flex-row flex-wrap justify-content-center">
-                            <div class="d-flex justify-content-center align-items-center card-pokemon-team bg-secondary">
-                                <span class="text-white">
-                                  {% if currentTeam.idPokemon1 != None %}
-                                  {{ currentTeam.idPokemon1 }}
-                                    <form action="{% url 'removePokemon' %}" method="POST">
-                                      {% csrf_token %}
-                                      <input type="hidden" name="idPokemon" value="1">
-                                      <button type="submit" class="btn btn-danger">Retirer</button>
-                                    </form>
-                                  {% else %}
-                                    Aucun Pokemon ajouté
-                                  {% endif %}
-                                </span>
-                            </div>
-                            <div class="d-flex justify-content-center align-items-center card-pokemon-team bg-secondary">
-                              <span class="text-white">
-                                {% if currentTeam.idPokemon2 != None %}
-                                {{ currentTeam.idPokemon2 }}
-                                  <form action="{% url 'removePokemon' %}" method="POST">
-                                    {% csrf_token %}
-                                    <input type="hidden" name="idPokemon" value="2">
-                                    <button type="submit" class="btn btn-danger">Retirer</button>
-                                  </form>
-                                  {% else %}
-                                    Aucun Pokemon ajouté
-                                {% endif %}
-                              </span>
-                            </div>
-                            <div class="d-flex justify-content-center align-items-center card-pokemon-team bg-secondary">
-                              <span class="text-white">
-                                {% if currentTeam.idPokemon3 != None %}
-                                {{ currentTeam.idPokemon3 }}
-                                  <form action="{% url 'removePokemon' %}" method="POST">
-                                    {% csrf_token %}
-                                    <input type="hidden" name="idPokemon" value="3">
-                                    <button type="submit" class="btn btn-danger">Retirer</button>
-                                  </form>
-                                  {% else %}
-                                    Aucun Pokemon ajouté
-                                {% endif %}
-                              </span>
-                            </div>
-                            <div class="d-flex justify-content-center align-items-center card-pokemon-team bg-secondary">
-                              <span class="text-white">
-                                {% if currentTeam.idPokemon4 != None %}
-                                {{ currentTeam.idPokemon4 }}
-                                  <form action="{% url 'removePokemon' %}" method="POST">
-                                    {% csrf_token %}
-                                    <input type="hidden" name="idPokemon" value="4">
-                                    <button type="submit" class="btn btn-danger">Retirer</button>
-                                  </form>
-                                  {% else %}
-                                    Aucun Pokemon ajouté
-                                {% endif %}
-                              </span>
-                            </div>
-                            <div class="d-flex justify-content-center align-items-center card-pokemon-team bg-secondary">
-                              <span class="text-white">
-                                {% if currentTeam.idPokemon5 != None %}
-                                {{ currentTeam.idPokemon5 }}
-                                  <form action="{% url 'removePokemon' %}" method="POST">
-                                    {% csrf_token %}
-                                    <input type="hidden" name="idPokemon" value="5">
-                                    <button type="submit" class="btn btn-danger">Retirer</button>
-                                  </form>
-                                  {% else %}
-                                    Aucun Pokemon ajouté
-                                {% endif %}
-                              </span>
-                            </div>
-                        </div>
-                    </div>
-                    <form action="{% url 'createTeam' %}" method="POST" class="float-end">
+                  <div class="text-start">
+                    <h3>Nom de l'équipe</h3>
+                    <form action="{% url 'updateTeamTitle' %}" method="POST" class="d-flex no-block col-md-12">
                       {% csrf_token %}
-                      <button type="submit" class="btn btn-primary">Créer l'équipe</button>
+                      {% if teams.title == None %}
+                        <input class="form-control" type="text" name="title" placeholder="Renseigner le nom de votre équipe">
+                      {% else %}
+                        <input class="form-control" type="text" name="title" value="{{teams.title}}">
+                      {% endif %}
+                      <button type="submit" class="btn btn-primary ms-3">Modifier</button>
                     </form>
+                  </div>
+                  <div class="container p-4">
+                      <div class="d-flex flex-row flex-wrap justify-content-center">
+                        {% if teams.pokemon1 != None %}
+                        {% for pokemon in teams.pokemon1 %}
+                          <div class="col-md-3 card pokemon" style="background-color: {{ pokemon.backgroundColor }}">
+                            <a href="{% url 'pokemon-details' pokemon.id %}" class="link-card">
+                              <div class="card-img-top">
+                                  <img src="{{ pokemon.img }}" alt="{{ pokemon.name }}" loading="lazy">
+                              </div>
+                              <div class='card-body'>
+                                <span class="number">N°{{ pokemon.id|stringformat:"03d" }}</span>
+                                <h3 class="name">{{ pokemon.name|title }}</h3>
+                                <small class="tag" style="background-color: {{ pokemon.color }}">
+                                    <span class="type">{{ pokemon.type }}</span>
+                                </small>
+                              </div>
+                            </a>
+                            <form action="{% url 'removePokemon' %}" method="POST">
+                              {% csrf_token %}
+                              <input type="hidden" name="idPokemon" value="1">
+                              <button type="submit" class="btn btn-danger">Retirer</button>
+                            </form>
+                          </div>
+                        {% endfor %}
+                        {% else %}
+                          <div class="col-md-3 card pokemon">
+                            <span class="text-dark">Aucun Pokemon ajouté</span>
+                          </div>
+                        {% endif %}
+                        {% if teams.pokemon2 != None %}
+                        {% for pokemon in teams.pokemon2 %}
+                          <div class="col-md-3 card pokemon" style="background-color: {{ pokemon.backgroundColor }}">
+                            <a href="{% url 'pokemon-details' pokemon.id %}" class="link-card">
+                              <div class="card-img-top">
+                                  <img src="{{ pokemon.img }}" alt="{{ pokemon.name }}" loading="lazy">
+                              </div>
+                              <div class='card-body'>
+                                <span class="number">N°{{ pokemon.id|stringformat:"03d" }}</span>
+                                <h3 class="name">{{ pokemon.name|title }}</h3>
+                                <small class="tag" style="background-color: {{ pokemon.color }}">
+                                    <span class="type">{{ pokemon.type }}</span>
+                                </small>
+                              </div>
+                            </a>
+                            <form action="{% url 'removePokemon' %}" method="POST">
+                              {% csrf_token %}
+                              <input type="hidden" name="idPokemon" value="2">
+                              <button type="submit" class="btn btn-danger">Retirer</button>
+                            </form>
+                          </div>
+                        {% endfor %}
+                        {% else %}
+                          <div class="col-md-3 card pokemon">
+                            <span class="text-dark">Aucun Pokemon ajouté</span>
+                          </div>
+                        {% endif %}
+                        {% if teams.pokemon3 != None %}
+                        {% for pokemon in teams.pokemon3 %}
+                        <div class="col-md-3 card pokemon bg-secondary" style="background-color: {{ pokemon.backgroundColor }}">
+                                <a href="{% url 'pokemon-details' pokemon.id %}" class="link-card">
+                                    <div class="card-img-top">
+                                        <img src="{{ pokemon.img }}" alt="{{ pokemon.name }}" loading="lazy">
+                                    </div>
+                                    <div class='card-body'>
+                                        <span class="number">N°{{ pokemon.id|stringformat:"03d" }}</span>
+                                        <h3 class="name">{{ pokemon.name|title }}</h3>
+                                        <small class="tag" style="background-color: {{ pokemon.color }}">
+                                            <span class="type">{{ pokemon.type }}</span>
+                                        </small>
+                                    </div>
+                                </a>
+                              <form action="{% url 'removePokemon' %}" method="POST">
+                                {% csrf_token %}
+                                <input type="hidden" name="idPokemon" value="3">
+                                <button type="submit" class="btn btn-danger">Retirer</button>
+                              </form>
+                            </div>
+                            {% endfor %}
+                          {% else %}
+                            <div class="col-md-3 card pokemon">
+                              <span class="text-dark">Aucun Pokemon ajouté</span>
+                            </div>
+                          {% endif %}
+                          {% if teams.pokemon4 != None %}
+                          {% for pokemon in teams.pokemon4 %}
+                          <div class="col-md-3 card pokemon" style="background-color: {{ pokemon.backgroundColor }}">
+                                <a href="{% url 'pokemon-details' pokemon.id %}" class="link-card">
+                                    <div class="card-img-top">
+                                        <img src="{{ pokemon.img }}" alt="{{ pokemon.name }}" loading="lazy">
+                                    </div>
+                                    <div class='card-body'>
+                                        <span class="number">N°{{ pokemon.id|stringformat:"03d" }}</span>
+                                        <h3 class="name">{{ pokemon.name|title }}</h3>
+                                        <small class="tag" style="background-color: {{ pokemon.color }}">
+                                            <span class="type">{{ pokemon.type }}</span>
+                                        </small>
+                                    </div>
+                                </a>
+                                <form action="{% url 'removePokemon' %}" method="POST">
+                                  {% csrf_token %}
+                                  <input type="hidden" name="idPokemon" value="4">
+                                  <button type="submit" class="btn btn-danger">Retirer</button>
+                                </form>
+                              </div>
+                            {% endfor %}
+                          {% else %}
+                            <div class="col-md-3 card pokemon">
+                              <span class="text-dark">Aucun Pokemon ajouté</span>
+                            </div>
+                          {% endif %}
+                        {% if teams.pokemon5 != None %}
+                        {% for pokemon in teams.pokemon5 %}
+                        <div class="col-md-3 card pokemon" style="background-color: {{ pokemon.backgroundColor }}">
+                              <a href="{% url 'pokemon-details' pokemon.id %}" class="link-card">
+                                  <div class="card-img-top">
+                                      <img src="{{ pokemon.img }}" alt="{{ pokemon.name }}" loading="lazy">
+                                  </div>
+                                  <div class='card-body'>
+                                      <span class="number">N°{{ pokemon.id|stringformat:"03d" }}</span>
+                                      <h3 class="name">{{ pokemon.name|title }}</h3>
+                                      <small class="tag" style="background-color: {{ pokemon.color }}">
+                                          <span class="type">{{ pokemon.type }}</span>
+                                      </small>
+                                  </div>
+                              </a>
+                              <form action="{% url 'removePokemon' %}" method="POST">
+                                {% csrf_token %}
+                                <input type="hidden" name="idPokemon" value="5">
+                                <button type="submit" class="btn btn-danger">Retirer</button>
+                              </form>
+                            </div>
+                            {% endfor %}
+                          {% else %}
+                            <div class="col-md-3 card pokemon">
+                              <span class="text-dark">Aucun Pokemon ajouté</span>
+                            </div>
+                          {% endif %}
+                      </div>
+                  </div>
+                  <form action="{% url 'createTeam' %}" method="POST" class="float-end">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-primary">Créer l'équipe</button>
+                  </form>
                 </div>
-                {% for team in fullTeam %}
-                  <h2>Anciennes équipes</h2>
+              {% endfor %}
+            <div class="d-flex flex-column flex-nowrap align-items-center">
+              <h2>Anciennes équipes</h2>
+              {% for team in team_list %}
                   <div class="card-team">
                       <div class="text-start">
-                        <h3>{{ team.title }}</h3>
+                          <h2 class="">{{ team.title|title }}</h2>
+                          <span class="text-secondary">Créé par : {{ team.author }}</span>
+                          <div class="float-end">
+                            <form action="{% url 'removeTeam' %}" method="POST" class="float-end">
+                              {% csrf_token %}
+                              <input type="hidden" name="id" value="{{team.id}}">
+                              <button type="submit" class="btn rounded-5 btn-danger">
+                                <span class="material-icons">
+                                delete
+                                </span>
+                              </button>
+                            </form>
+                          </div>
                       </div>
                       <div class="container p-4">
-                          <div class="row">
-                              <div class="d-flex justify-content-center align-items-center card-pokemon-team bg-secondary">
-                                  <span class="text-white">
-                                    {{ team.idPokemon1 }} 
-                                  </span>
+                          <div class="d-flex flex-row flex-wrap justify-content-center">
+                              {% for pokemon in team.pokemon1 %}
+                              <div class="col-md-3 card pokemon" style="background-color: {{ pokemon.backgroundColor }}">
+                                  <a href="{% url 'pokemon-details' pokemon.id %}" class="link-card">
+                                      <div class="card-img-top">
+                                          <img src="{{ pokemon.img }}" alt="{{ pokemon.name }}" loading="lazy">
+                                      </div>
+                                      <div class='card-body'>
+                                          <span class="number">N°{{ pokemon.id|stringformat:"03d" }}</span>
+                                          <h3 class="name">{{ pokemon.name|title }}</h3>
+                                          <small class="tag" style="background-color: {{ pokemon.color }}">
+                                              <span class="type">{{ pokemon.type }}</span>
+                                          </small>
+                                      </div>
+                                  </a>
                               </div>
-                              <div class="d-flex justify-content-center align-items-center card-pokemon-team bg-secondary">
-                                <span class="text-white">
-                                  {{ team.idPokemon2 }}
-                                </span>
+                              {% endfor %}
+                              {% for pokemon in team.pokemon2 %}
+                              <div class="col-md-3 card pokemon" style="background-color: {{ pokemon.backgroundColor }}">
+                                  <a href="{% url 'pokemon-details' pokemon.id %}" class="link-card">
+                                      <div class="card-img-top">
+                                          <img src="{{ pokemon.img }}" alt="{{ pokemon.name }}" loading="lazy">
+                                      </div>
+                                      <div class='card-body'>
+                                          <span class="number">N°{{ pokemon.id|stringformat:"03d" }}</span>
+                                          <h3 class="name">{{ pokemon.name|title }}</h3>
+                                          <small class="tag" style="background-color: {{ pokemon.color }}">
+                                              <span class="type">{{ pokemon.type }}</span>
+                                          </small>
+                                      </div>
+                                  </a>
                               </div>
-                          </div>
-                          <div class="row">
-                              <div class="d-flex justify-content-center align-items-center card-pokemon-team bg-secondary">
-                                <span class="text-white">
-                                  {{ team.idPokemon3 }}
-                                </span>
+                              {% endfor %}
+                              {% for pokemon in team.pokemon3 %}
+                              <div class="col-md-3 card pokemon" style="background-color: {{ pokemon.backgroundColor }}">
+                                  <a href="{% url 'pokemon-details' pokemon.id %}" class="link-card">
+                                      <div class="card-img-top">
+                                          <img src="{{ pokemon.img }}" alt="{{ pokemon.name }}" loading="lazy">
+                                      </div>
+                                      <div class='card-body'>
+                                          <span class="number">N°{{ pokemon.id|stringformat:"03d" }}</span>
+                                          <h3 class="name">{{ pokemon.name|title }}</h3>
+                                          <small class="tag" style="background-color: {{ pokemon.color }}">
+                                              <span class="type">{{ pokemon.type }}</span>
+                                          </small>
+                                      </div>
+                                  </a>
                               </div>
-                              <div class="d-flex justify-content-center align-items-center card-pokemon-team bg-secondary">
-                                <span class="text-white">
-                                  {{ team.idPokemon4 }}
-                                </span>
+                              {% endfor %}
+                              {% for pokemon in team.pokemon4 %}
+                              <div class="col-md-3 card pokemon" style="background-color: {{ pokemon.backgroundColor }}">
+                                  <a href="{% url 'pokemon-details' pokemon.id %}" class="link-card">
+                                      <div class="card-img-top">
+                                          <img src="{{ pokemon.img }}" alt="{{ pokemon.name }}" loading="lazy">
+                                      </div>
+                                      <div class='card-body'>
+                                          <span class="number">N°{{ pokemon.id|stringformat:"03d" }}</span>
+                                          <h3 class="name">{{ pokemon.name|title }}</h3>
+                                          <small class="tag" style="background-color: {{ pokemon.color }}">
+                                              <span class="type">{{ pokemon.type }}</span>
+                                          </small>
+                                      </div>
+                                  </a>
                               </div>
-                              <div class="d-flex justify-content-center align-items-center card-pokemon-team bg-secondary">
-                                <span class="text-white">
-                                  {{ team.idPokemon5 }}
-                                </span>
+                              {% endfor %}
+                              {% for pokemon in team.pokemon5 %}
+                              <div class="col-md-3 card pokemon" style="background-color: {{ pokemon.backgroundColor }}">
+                                  <a href="{% url 'pokemon-details' pokemon.id %}" class="link-card">
+                                      <div class="card-img-top">
+                                          <img src="{{ pokemon.img }}" alt="{{ pokemon.name }}" loading="lazy">
+                                      </div>
+                                      <div class='card-body'>
+                                          <span class="number">N°{{ pokemon.id|stringformat:"03d" }}</span>
+                                          <h3 class="name">{{ pokemon.name|title }}</h3>
+                                          <small class="tag" style="background-color: {{ pokemon.color }}">
+                                              <span class="type">{{ pokemon.type }}</span>
+                                          </small>
+                                      </div>
+                                  </a>
                               </div>
+                              {% endfor %}
                           </div>
                       </div>
-                      <form action="{% url 'removeTeam' %}" method="POST" class="float-end">
-                        {% csrf_token %}
-                        <input type="hidden" name="id" value="{{team.id}}">
-                        <button type="submit" class="btn btn-danger">Supprimer l'équipe</button>
-                      </form>
                   </div>
-                {% endfor %}
-            </div>
+              {% endfor %}
+          </div>
         </main>
         <script src="https://unpkg.com/@popperjs/core@2"></script>
         <script src="../../static/pokedex/js/bootstrap.bundle.min.js"></script>

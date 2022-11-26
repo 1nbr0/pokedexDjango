@@ -49,11 +49,15 @@
             </div>
           </div>
         </div>
-        <form action="{% url 'addPokemon' %}" method="post">
-          {% csrf_token %}
-          <input name="id" type="hidden" value={{pokemon.id}}>
-          <button type="submit">Ajouter</button>
-        </form>
+        <div class="btn-add-team">
+          <form action="{% url 'addPokemon' %}" method="post">
+            {% csrf_token %}
+            <input name="id" type="hidden" value={{pokemon.id}}>
+            <button type="submit" class="btn" style="background-color: {{ pokemon.color }}">
+              Ajouter à l'équipe
+            </button>
+          </form>
+        </div>
       </div>
     {% endfor %}
   </div>
