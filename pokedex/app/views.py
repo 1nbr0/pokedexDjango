@@ -16,6 +16,7 @@ import asyncio
 # Create your views here.
 url = "https://pokeapi.co/api/v2/pokemon/"
 
+
 backgroundColors = {
             "fire": "#FDDFDF",
             "grass": "#DEFDE0",
@@ -58,48 +59,83 @@ colors = {
             }
 
 
-async def index(request):
-    if (request.GET.get('search')):
 
-        pokemonArray = []
+async def index(request):
+    urlPage = 'https://pokeapi.co/api/v2/pokemon/'
+    page= []
+    pokemonArray = []
+    error = ""
+    search = None
+    if(request.GET.get('search')):
+        search = False
+    else:
+        search = True
+
+    
+    if(request.POST.get('next')):
+        urlPage = request.POST.get('next')
+    elif(request.POST.get('previous')):
+        urlPage = request.POST.get('previous')
+    else:
+        urlPage = "https://pokeapi.co/api/v2/pokemon/?offset=0&limit=30"
+
+
+    async with httpx.AsyncClient() as client:
+        responses = await asyncio.gather(*[getPagination(urlPage, client)])
+        for response in responses:
+                    page = response    
+
+    context = {'pagination': page, 'search': search, 'pokemons': pokemonArray,'error': error}
+    
+    if(request.GET.get('search')):
         try:
             async with httpx.AsyncClient() as client:
                 responses = await asyncio.gather(*[getPokemonByIdAsync(request.GET['search'].lower(), client) for i in range(1, 2)])
-                pokemonArray.append([response for response in responses])
+                for response in responses:
+                    pokemonArray.append(response)
+                    
+            return render(request, "pokedex/index.html", context)
+        
         except:
-            pokemonArray = []
-            return render(request, "pokedex/index.html", {'pokemons': pokemonArray})
+            return render(request, "pokedex/index.html", context)
 
-        return render(request, "pokedex/index.html", {'pokemons': pokemonArray})
-
+        
     else:
-        pokemonArray = []
-        error = ""
+        pokemonOnPage = []
+        async with httpx.AsyncClient() as client:
+                responses = await asyncio.gather(*[getPokemonPageAsync(client, urlPage)])
+                for response in responses:
+                    pokemonOnPage = response
+        
         try:
             async with httpx.AsyncClient() as client:
-                responses = await asyncio.gather(*[getPokemonByIdAsync(i, client) for i in range(1, 20)])
-            pokemonArray.append([response for response in responses])
+                responses = await asyncio.gather(*[getPokemonByIdAsync(pokemon['name'], client) for pokemon in pokemonOnPage])
+                for response in responses:
+                    pokemonArray.append(response)
 
-            context = {
-                'pokemons': pokemonArray,
-                'error': error
-
-            }
             return render(request, "pokedex/index.html", context)
+        
         except:
-
             pokemonArray = []
-            error = "ERREUR : Veuillez choisir une meilleure connexion."
-            context = {
-                'pokemons': pokemonArray,
-                'error': error
+            error = "ERREUR : Si le problème persiste, essayer de changer de connexion."
+            return render(request, "pokedex/index.html", {'pokemonOnPage': pokemonOnPage})
+        
+        
 
-            }
-            return render(request, "pokedex/index.html", context)
+async def getPagination(urlPage, client):
+    r = await client.get(urlPage)
+    results = r.json()
+    pagination = {"next": results["next"], "previous": results["previous"]}
+    return pagination
+
+async def getPokemonPageAsync(client, urlPage):
+    r = await client.get(f'{urlPage}')
+    results = r.json()
+    return results["results"]
 
 
 async def getPokemonByIdAsync(id, client):
-    api = url + str(id)
+    api = f'{url}{id}'
     r = await client.get(api)
 
     results = r.json()
@@ -115,7 +151,7 @@ async def getPokemonByIdAsync(id, client):
 
 
 def getPokemonById(id):
-    api = url + str(id)
+    api = f'{url}{id}'
     r = requests.get(api)
     if r.status_code == 200:
         results = r.json()
@@ -172,10 +208,7 @@ def pokemonDetails(request, id):
         pokemon["backgroundColor"] = backgroundColors[pokemon["types"][0]["type"]["name"]]
         pokemon["color"] = colors[pokemon["types"][0]["type"]["name"]]
 
-    return render(
-        request,
-        "pokedex/pokemonDetails.html",
-        {'pokemons': pokemonDetails})
+    return render(request, "pokedex/pokemonDetails.html", {'pokemons': pokemonDetails})
 
 # Gestion des équipes
 
