@@ -10,17 +10,15 @@ from .models import UserInfo
 # Import pour compte utilisateur
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
+from asgiref.sync import sync_to_async
 
 import httpx
 import asyncio
 from asgiref.sync import sync_to_async
 from time import sleep
 
-
-
 # Create your views here.
 url = "https://pokeapi.co/api/v2/pokemon/"
-
 
 backgroundColors = {
             "fire": "#FDDFDF",
@@ -63,74 +61,72 @@ colors = {
             "water": "#417D9A",
             }
 
+
 @sync_to_async
 def getIsUserAuthenticated(request):
     return request.user.is_authenticated
 
+
 async def index(request):
-  
     user = await getIsUserAuthenticated(request)
 
     urlPage = 'https://pokeapi.co/api/v2/pokemon/'
-    page= []
+    page = []
     pokemonArray = []
     error = ""
     search = None
-    if(request.GET.get('search')):
+    if (request.GET.get('search')):
         search = False
     else:
         search = True
 
-    
-    if(request.POST.get('next')):
+    if (request.POST.get('next')):
         urlPage = request.POST.get('next')
-    elif(request.POST.get('previous')):
+    elif (request.POST.get('previous')):
         urlPage = request.POST.get('previous')
     else:
         urlPage = "https://pokeapi.co/api/v2/pokemon/?offset=0&limit=30"
 
-
     async with httpx.AsyncClient() as client:
         responses = await asyncio.gather(*[getPagination(urlPage, client)])
         for response in responses:
-                    page = response    
+            page = response
 
     context = {'user': user, 'pagination': page, 'search': search, 'pokemons': pokemonArray,'error': error}
-    
-    if(request.GET.get('search')):
+
+    if (request.GET.get('search')):
         try:
             async with httpx.AsyncClient() as client:
                 responses = await asyncio.gather(*[getPokemonByIdAsync(request.GET['search'].lower(), client) for i in range(1, 2)])
                 for response in responses:
                     pokemonArray.append(response)
-                    
             return render(request, "pokedex/index.html", context)
-        
         except:
             return render(request, "pokedex/index.html", context)
 
-        
     else:
         pokemonOnPage = []
         async with httpx.AsyncClient() as client:
-                responses = await asyncio.gather(*[getPokemonPageAsync(client, urlPage)])
-                for response in responses:
-                    pokemonOnPage = response
-        
+            responses = await asyncio.gather(*[getPokemonPageAsync(client, urlPage)])
+            for response in responses:
+                pokemonOnPage = response
         try:
             async with httpx.AsyncClient() as client:
                 responses = await asyncio.gather(*[getPokemonByIdAsync(pokemon['name'], client) for pokemon in pokemonOnPage])
                 for response in responses:
                     pokemonArray.append(response)
 
+            context = {
+                'pokemons': pokemonArray,
+                'error': error,
+                'is_authenticated': await sync_to_async(lambda: request.user.is_authenticated)(),
+            }
             return render(request, "pokedex/index.html", context)
-        
         except:
             pokemonArray = []
             error = "ERREUR : Si le problème persiste, essayer de changer de connexion."
-            return render(request, "pokedex/index.html", {'pokemonOnPage': pokemonOnPage})
-        
-        
+            return render(request, "pokedex/index.html", {'pokemonOnPage': pokemonOnPage, 'is_authenticated': await sync_to_async(lambda: request.user.is_authenticated)()})
+
 
 async def getPagination(urlPage, client):
     r = await client.get(urlPage)
@@ -330,10 +326,9 @@ def removeTeam(request):
 def pokemonTeamView(request):
     teams = PokeTeam.objects.all().exclude(publish=False)
     full_team = []
-        
+
     for team in teams:
-       
-        newTeam  = {
+        newTeam = {
             'author': team.user,
             'title': team.title,
             'pokemon1': getPokemonInDB(team.idPokemon1),
@@ -401,7 +396,7 @@ def dashboardView(request):
         currentTeam = PokeTeam.objects.filter(id=userInfo.currentTeam)
         current_team = []
         for team in currentTeam:
-            newTeam  = {
+            newTeam = {
                 'author': team.user,
                 'title': team.title,
                 'pokemon1': getPokemonInDB(team.idPokemon1),
@@ -411,11 +406,11 @@ def dashboardView(request):
                 'pokemon5': getPokemonInDB(team.idPokemon5),
             }
             current_team.append(newTeam)
-        
+
         teams = PokeTeam.objects.filter(user=request.user).exclude(publish=False)
         full_team = []
         for team in teams:
-            newTeam  = {
+            newTeam = {
                 'author': team.user,
                 'title': team.title,
                 'pokemon1': getPokemonInDB(team.idPokemon1),
@@ -425,8 +420,8 @@ def dashboardView(request):
                 'pokemon5': getPokemonInDB(team.idPokemon5),
             }
             full_team.append(newTeam)
-        
-        context = { 
+
+        context = {
             'current_team': current_team,
             'team_list': full_team,
         }
@@ -434,22 +429,22 @@ def dashboardView(request):
     else:
         return redirect("login")
 
-
-
 # Pokemon BDD
+
 
 # Ajout pokémon dans BDD s'il existe pas (par rapport a son id)
 def addPokemonInDB(id):
     exist = list(Pokemon.objects.filter(idPokemon=id))
-    if (len(exist) is 0):
+    if (len(exist) == 0):
         api = f'{url}{id}'
         r = requests.get(api)
         results = r.json()
         pokemon = Pokemon.objects.create(idPokemon=results["id"], name=results["name"], img=results["sprites"]["other"]["home"]["front_default"], type=results["types"][0]["type"]["name"], color=colors[results["types"][0]["type"]["name"]], backgroundColor=backgroundColors[results["types"][0]["type"]["name"]])
         pokemon.save()
 
+
 def getPokemonInDB(id):
     exist = list(Pokemon.objects.filter(idPokemon=id))
-    if (len(exist) is not 0):
+    if (len(exist) != 0):
         return Pokemon.objects.filter(idPokemon=id)
     return None
