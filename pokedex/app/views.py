@@ -235,14 +235,6 @@ def updateTeamTitle(request):
     else:
         return redirect('login')
 
-def addPokemonInDB(id):
-    exist = list(Pokemon.objects.filter(idPokemon=id))
-    if (len(exist) is 0):
-        api = f'{url}{id}'
-        r = requests.get(api)
-        results = r.json()
-        pokemon = Pokemon.objects.create(idPokemon=results["id"], name=results["name"], img=results["sprites"]["other"]["home"]["front_default"], type=results["types"][0]["type"]["name"], color=colors[results["types"][0]["type"]["name"]], backgroundColor=backgroundColors[results["types"][0]["type"]["name"]])
-        pokemon.save()
 
 # Ajoute un pokémon dans l'équipe d'un utilisateur
 def addPokemonInCurrentTeam(request):
@@ -341,11 +333,11 @@ def pokemonTeamView(request):
         newTeam  = {
             'author': team.user,
             'title': team.title,
-            'pokemon1': Pokemon.objects.filter(idPokemon=team.idPokemon1),
-            'pokemon2': Pokemon.objects.filter(idPokemon=team.idPokemon2),
-            'pokemon3': Pokemon.objects.filter(idPokemon=team.idPokemon3),
-            'pokemon4': Pokemon.objects.filter(idPokemon=team.idPokemon4),
-            'pokemon5': Pokemon.objects.filter(idPokemon=team.idPokemon5),
+            'pokemon1': getPokemonInDB(team.idPokemon1),
+            'pokemon2': getPokemonInDB(team.idPokemon2),
+            'pokemon3': getPokemonInDB(team.idPokemon3),
+            'pokemon4': getPokemonInDB(team.idPokemon4),
+            'pokemon5': getPokemonInDB(team.idPokemon5),
         }
         full_team.append(newTeam)
 
@@ -403,12 +395,58 @@ def LogoutView(request):
 def dashboardView(request):
     if request.user.is_authenticated:
         userInfo = UserInfo.objects.get(user=request.user)
-        currentTeam = PokeTeam.objects.get(id=userInfo.currentTeam)
-        fullTeam = PokeTeam.objects.all().filter(user=request.user).exclude(publish=False)
+        currentTeam = PokeTeam.objects.filter(id=userInfo.currentTeam)
+        current_team = []
+        for team in currentTeam:
+            newTeam  = {
+                'author': team.user,
+                'title': team.title,
+                'pokemon1': getPokemonInDB(team.idPokemon1),
+                'pokemon2': getPokemonInDB(team.idPokemon2),
+                'pokemon3': getPokemonInDB(team.idPokemon3),
+                'pokemon4': getPokemonInDB(team.idPokemon4),
+                'pokemon5': getPokemonInDB(team.idPokemon5),
+            }
+            current_team.append(newTeam)
+        
+        teams = PokeTeam.objects.filter(user=request.user).exclude(publish=False)
+        full_team = []
+        for team in teams:
+            newTeam  = {
+                'author': team.user,
+                'title': team.title,
+                'pokemon1': getPokemonInDB(team.idPokemon1),
+                'pokemon2': getPokemonInDB(team.idPokemon2),
+                'pokemon3': getPokemonInDB(team.idPokemon3),
+                'pokemon4': getPokemonInDB(team.idPokemon4),
+                'pokemon5': getPokemonInDB(team.idPokemon5),
+            }
+            full_team.append(newTeam)
+        
         context = { 
-            'currentTeam': currentTeam,
-            'fullTeam': fullTeam,
+            'current_team': current_team,
+            'team_list': full_team,
         }
         return render(request, 'pokedex/account/dashboard.html', context)
     else:
         return redirect("login")
+
+
+
+# Pokemon BDD
+
+# Ajout pokémon dans BDD s'il existe pas (par rapport a son id)
+def addPokemonInDB(id):
+    exist = list(Pokemon.objects.filter(idPokemon=id))
+    if (len(exist) is 0):
+        api = f'{url}{id}'
+        r = requests.get(api)
+        results = r.json()
+        pokemon = Pokemon.objects.create(idPokemon=results["id"], name=results["name"], img=results["sprites"]["other"]["home"]["front_default"], type=results["types"][0]["type"]["name"], color=colors[results["types"][0]["type"]["name"]], backgroundColor=backgroundColors[results["types"][0]["type"]["name"]])
+        pokemon.save()
+
+def getPokemonInDB(id):
+    exist = list(Pokemon.objects.filter(idPokemon=id))
+    if (len(exist) is not 0):
+        return Pokemon.objects.filter(idPokemon=id)
+    return None
