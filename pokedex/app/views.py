@@ -9,6 +9,7 @@ from .models import UserInfo
 # Import pour compte utilisateur
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
+from asgiref.sync import sync_to_async
 
 import httpx
 import asyncio
@@ -68,9 +69,9 @@ async def index(request):
                 pokemonArray.append([response for response in responses])
         except:
             pokemonArray = []
-            return render(request, "pokedex/index.html", {'pokemons': pokemonArray})
+            return render(request, "pokedex/index.html", {'pokemons': pokemonArray, 'is_authenticated': await sync_to_async(lambda: request.user.is_authenticated)()})
 
-        return render(request, "pokedex/index.html", {'pokemons': pokemonArray})
+        return render(request, "pokedex/index.html", {'pokemons': pokemonArray, 'is_authenticated': await sync_to_async(lambda: request.user.is_authenticated)()})
 
     else:
         pokemonArray = []
@@ -82,8 +83,8 @@ async def index(request):
 
             context = {
                 'pokemons': pokemonArray,
-                'error': error
-
+                'error': error,
+                'is_authenticated': await sync_to_async(lambda: request.user.is_authenticated)(),
             }
             return render(request, "pokedex/index.html", context)
         except:
@@ -92,8 +93,8 @@ async def index(request):
             error = "ERREUR : Veuillez choisir une meilleure connexion."
             context = {
                 'pokemons': pokemonArray,
-                'error': error
-
+                'error': error,
+                'is_authenticated': await sync_to_async(lambda: request.user.is_authenticated)(),
             }
             return render(request, "pokedex/index.html", context)
 

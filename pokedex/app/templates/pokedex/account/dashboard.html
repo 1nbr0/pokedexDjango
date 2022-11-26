@@ -1,33 +1,163 @@
 <!DOCTYPE html>
+{% load static %}
+
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
-</head>
-<body>
-    <h1>Dashboard de {{user}}</h1>
-    <p>équipe en cours de création</p>
-    <form action="{% url 'updateTeamTitle' %}" method="POST">{% csrf_token %}<p>Titre</p>{% if currentTeam.title == None %}<input type="text" name="title">{% else %}<input type="text" name="title" value="{{currentTeam.title}}">{% endif %}<button type="submit">Modifier</button></form>
-    <li>Pokémon 1 : {{ currentTeam.idPokemon1 }} {% if currentTeam.idPokemon1 != None %}<form action="{% url 'removePokemon' %}" method="POST">{% csrf_token %}<input type="hidden" name="idPokemon" value="1"><button type="submit">Retirer</button></form>{% endif %}</li>
-    <li>Pokémon 2 : {{ currentTeam.idPokemon2 }} {% if currentTeam.idPokemon2 != None %}<form action="{% url 'removePokemon' %}" method="POST">{% csrf_token %}<input type="hidden" name="idPokemon" value="2"><button type="submit">Retirer</button></form>{% endif %}</li>
-    <li>Pokémon 3 : {{ currentTeam.idPokemon3 }} {% if currentTeam.idPokemon3 != None %}<form action="{% url 'removePokemon' %}" method="POST">{% csrf_token %}<input type="hidden" name="idPokemon" value="3"><button type="submit">Retirer</button></form>{% endif %}</li>
-    <li>Pokémon 4 : {{ currentTeam.idPokemon4 }} {% if currentTeam.idPokemon4 != None %}<form action="{% url 'removePokemon' %}" method="POST">{% csrf_token %}<input type="hidden" name="idPokemon" value="4"><button type="submit">Retirer</button></form>{% endif %}</li>
-    <li>Pokémon 5 : {{ currentTeam.idPokemon5 }} {% if currentTeam.idPokemon5 != None %}<form action="{% url 'removePokemon' %}" method="POST">{% csrf_token %}<input type="hidden" name="idPokemon" value="5"><button type="submit">Retirer</button></form>{% endif %}</li>
-      <form action="{% url 'createTeam' %}" method="POST">{% csrf_token %}<button type="submit">Créer l'équipe</button></form>
-
-
-    <p>Anciennes équipes</p>
-    {% for team in fullTeam %}
-    <p>Titre de l'équipe : {{ team.title }}</p>
-    <li>Pokémon 1 : {{ team.idPokemon1 }} </li>
-    <li>Pokémon 2 : {{ team.idPokemon2 }} </li>
-    <li>Pokémon 3 : {{ team.idPokemon3 }} </li>
-    <li>Pokémon 4 : {{ team.idPokemon4 }} </li>
-    <li>Pokémon 5 : {{ team.idPokemon5 }} </li>
-    <form action="{% url 'removeTeam' %}" method="POST">{% csrf_token %}<input type="hidden" name="id" value="{{team.id}}"><button type="submit">Supprimer l'équipe</button></form>
-    {% endfor %}
-
-</body>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="shortcut icon" type="image/svg" href="{% static 'images/logo.svg' %}"/>
+        <link rel="stylesheet" type="text/css" href="{% static 'pokedex/css/bootstrap.css' %}" />
+        <link rel="stylesheet" type="text/css" href="{% static 'pokedex/css/pokemon.css' %}" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <title>Dashboard</title>
+    </head>
+    <body class="app bg-app-gradient">
+        {% include "../navigation/header.html" %}
+        <main class="app-container container">
+            <h1 class="mb-2">Profil de {{user}}</h1>
+            <div class="d-flex flex-column flex-nowrap align-items-center">
+              <h2>Équipe en cours de création</h2>
+                <div class="card-team">
+                    <div class="text-start">
+                      <h3>Nom de l'équipe</h3>
+                      <form action="{% url 'updateTeamTitle' %}" method="POST" class="d-flex no-block col-md-12">
+                        {% csrf_token %}
+                        {% if currentTeam.title == None %}
+                          <input class="form-control" type="text" name="title" placeholder="Renseigner le nom de votre équipe">
+                        {% else %}
+                          <input class="form-control" type="text" name="title" value="{{currentTeam.title}}">
+                        {% endif %}
+                        <button type="submit" class="btn btn-primary ms-3">Modifier</button>
+                      </form>
+                    </div>
+                    <div class="container p-4">
+                        <div class="d-flex flex-row flex-wrap justify-content-center">
+                            <div class="d-flex justify-content-center align-items-center card-pokemon-team bg-secondary">
+                                <span class="text-white">
+                                  {% if currentTeam.idPokemon1 != None %}
+                                  {{ currentTeam.idPokemon1 }}
+                                    <form action="{% url 'removePokemon' %}" method="POST">
+                                      {% csrf_token %}
+                                      <input type="hidden" name="idPokemon" value="1">
+                                      <button type="submit" class="btn btn-danger">Retirer</button>
+                                    </form>
+                                  {% else %}
+                                    Aucun Pokemon ajouté
+                                  {% endif %}
+                                </span>
+                            </div>
+                            <div class="d-flex justify-content-center align-items-center card-pokemon-team bg-secondary">
+                              <span class="text-white">
+                                {% if currentTeam.idPokemon2 != None %}
+                                {{ currentTeam.idPokemon2 }}
+                                  <form action="{% url 'removePokemon' %}" method="POST">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="idPokemon" value="2">
+                                    <button type="submit" class="btn btn-danger">Retirer</button>
+                                  </form>
+                                  {% else %}
+                                    Aucun Pokemon ajouté
+                                {% endif %}
+                              </span>
+                            </div>
+                            <div class="d-flex justify-content-center align-items-center card-pokemon-team bg-secondary">
+                              <span class="text-white">
+                                {% if currentTeam.idPokemon3 != None %}
+                                {{ currentTeam.idPokemon3 }}
+                                  <form action="{% url 'removePokemon' %}" method="POST">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="idPokemon" value="3">
+                                    <button type="submit" class="btn btn-danger">Retirer</button>
+                                  </form>
+                                  {% else %}
+                                    Aucun Pokemon ajouté
+                                {% endif %}
+                              </span>
+                            </div>
+                            <div class="d-flex justify-content-center align-items-center card-pokemon-team bg-secondary">
+                              <span class="text-white">
+                                {% if currentTeam.idPokemon4 != None %}
+                                {{ currentTeam.idPokemon4 }}
+                                  <form action="{% url 'removePokemon' %}" method="POST">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="idPokemon" value="4">
+                                    <button type="submit" class="btn btn-danger">Retirer</button>
+                                  </form>
+                                  {% else %}
+                                    Aucun Pokemon ajouté
+                                {% endif %}
+                              </span>
+                            </div>
+                            <div class="d-flex justify-content-center align-items-center card-pokemon-team bg-secondary">
+                              <span class="text-white">
+                                {% if currentTeam.idPokemon5 != None %}
+                                {{ currentTeam.idPokemon5 }}
+                                  <form action="{% url 'removePokemon' %}" method="POST">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="idPokemon" value="5">
+                                    <button type="submit" class="btn btn-danger">Retirer</button>
+                                  </form>
+                                  {% else %}
+                                    Aucun Pokemon ajouté
+                                {% endif %}
+                              </span>
+                            </div>
+                        </div>
+                    </div>
+                    <form action="{% url 'createTeam' %}" method="POST" class="float-end">
+                      {% csrf_token %}
+                      <button type="submit" class="btn btn-primary">Créer l'équipe</button>
+                    </form>
+                </div>
+                {% for team in fullTeam %}
+                  <h2>Anciennes équipes</h2>
+                  <div class="card-team">
+                      <div class="text-start">
+                        <h3>{{ team.title }}</h3>
+                      </div>
+                      <div class="container p-4">
+                          <div class="row">
+                              <div class="d-flex justify-content-center align-items-center card-pokemon-team bg-secondary">
+                                  <span class="text-white">
+                                    {{ team.idPokemon1 }} 
+                                  </span>
+                              </div>
+                              <div class="d-flex justify-content-center align-items-center card-pokemon-team bg-secondary">
+                                <span class="text-white">
+                                  {{ team.idPokemon2 }}
+                                </span>
+                              </div>
+                          </div>
+                          <div class="row">
+                              <div class="d-flex justify-content-center align-items-center card-pokemon-team bg-secondary">
+                                <span class="text-white">
+                                  {{ team.idPokemon3 }}
+                                </span>
+                              </div>
+                              <div class="d-flex justify-content-center align-items-center card-pokemon-team bg-secondary">
+                                <span class="text-white">
+                                  {{ team.idPokemon4 }}
+                                </span>
+                              </div>
+                              <div class="d-flex justify-content-center align-items-center card-pokemon-team bg-secondary">
+                                <span class="text-white">
+                                  {{ team.idPokemon5 }}
+                                </span>
+                              </div>
+                          </div>
+                      </div>
+                      <form action="{% url 'removeTeam' %}" method="POST" class="float-end">
+                        {% csrf_token %}
+                        <input type="hidden" name="id" value="{{team.id}}">
+                        <button type="submit" class="btn btn-danger">Supprimer l'équipe</button>
+                      </form>
+                  </div>
+                {% endfor %}
+            </div>
+        </main>
+        <script src="https://unpkg.com/@popperjs/core@2"></script>
+        <script src="../../static/pokedex/js/bootstrap.bundle.min.js"></script>
+    </body>
 </html>
