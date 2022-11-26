@@ -4,6 +4,7 @@ from django.shortcuts import redirect
 
 # Import des models
 from .models import PokeTeam
+from .models import Pokemon
 from .models import UserInfo
 
 # Import pour compte utilisateur
@@ -12,6 +13,10 @@ from django.contrib.auth.models import User
 
 import httpx
 import asyncio
+from asgiref.sync import sync_to_async
+from time import sleep
+
+
 
 # Create your views here.
 url = "https://pokeapi.co/api/v2/pokemon/"
@@ -58,9 +63,14 @@ colors = {
             "water": "#417D9A",
             }
 
-
+@sync_to_async
+def getIsUserAuthenticated(request):
+    return request.user.is_authenticated
 
 async def index(request):
+  
+    user = await getIsUserAuthenticated(request)
+
     urlPage = 'https://pokeapi.co/api/v2/pokemon/'
     page= []
     pokemonArray = []
@@ -85,7 +95,7 @@ async def index(request):
         for response in responses:
                     page = response    
 
-    context = {'pagination': page, 'search': search, 'pokemons': pokemonArray,'error': error}
+    context = {'user': user, 'pagination': page, 'search': search, 'pokemons': pokemonArray,'error': error}
     
     if(request.GET.get('search')):
         try:
@@ -225,6 +235,14 @@ def updateTeamTitle(request):
     else:
         return redirect('login')
 
+def addPokemonInDB(id):
+    exist = list(Pokemon.objects.filter(idPokemon=id))
+    if (len(exist) is 0):
+        api = f'{url}{id}'
+        r = requests.get(api)
+        results = r.json()
+        pokemon = Pokemon.objects.create(idPokemon=results["id"], name=results["name"], img=results["sprites"]["other"]["home"]["front_default"], type=results["types"][0]["type"]["name"], color=colors[results["types"][0]["type"]["name"]], backgroundColor=backgroundColors[results["types"][0]["type"]["name"]])
+        pokemon.save()
 
 # Ajoute un pokémon dans l'équipe d'un utilisateur
 def addPokemonInCurrentTeam(request):
@@ -233,18 +251,23 @@ def addPokemonInCurrentTeam(request):
             userInfo = UserInfo.objects.get(user=request.user)
             userCurrentTeam = PokeTeam.objects.get(id=userInfo.currentTeam)
             if (userCurrentTeam.idPokemon1 is None):
+                addPokemonInDB(request.POST.get('id'))
                 userCurrentTeam.idPokemon1 = request.POST.get('id')
                 userCurrentTeam.save()
             elif (userCurrentTeam.idPokemon2 is None):
+                addPokemonInDB(request.POST.get('id'))
                 userCurrentTeam.idPokemon2 = request.POST.get('id')
                 userCurrentTeam.save()
             elif (userCurrentTeam.idPokemon3 is None):
+                addPokemonInDB(request.POST.get('id'))
                 userCurrentTeam.idPokemon3 = request.POST.get('id')
                 userCurrentTeam.save()
             elif (userCurrentTeam.idPokemon4 is None):
+                addPokemonInDB(request.POST.get('id'))
                 userCurrentTeam.idPokemon4 = request.POST.get('id')
                 userCurrentTeam.save()
             elif (userCurrentTeam.idPokemon5 is None):
+                addPokemonInDB(request.POST.get('id'))
                 userCurrentTeam.idPokemon5 = request.POST.get('id')
                 userCurrentTeam.save()
             if ((userCurrentTeam.idPokemon1 is not None) and (userCurrentTeam.idPokemon2 != None) and (userCurrentTeam.idPokemon3 != None) and (userCurrentTeam.idPokemon4 != None) and (userCurrentTeam.idPokemon5 != None)):
@@ -310,16 +333,24 @@ def removeTeam(request):
 
 # Affiche toutes les équipes publier
 def pokemonTeamView(request):
-    team_list = PokeTeam.objects.all().exclude(publish=False)
+    teams = PokeTeam.objects.all().exclude(publish=False)
     full_team = []
-    for team in team_list:
-        full_team.append(team)
+        
+    for team in teams:
+       
+        newTeam  = {
+            'author': team.user,
+            'title': team.title,
+            'pokemon1': Pokemon.objects.filter(idPokemon=team.idPokemon1),
+            'pokemon2': Pokemon.objects.filter(idPokemon=team.idPokemon2),
+            'pokemon3': Pokemon.objects.filter(idPokemon=team.idPokemon3),
+            'pokemon4': Pokemon.objects.filter(idPokemon=team.idPokemon4),
+            'pokemon5': Pokemon.objects.filter(idPokemon=team.idPokemon5),
+        }
+        full_team.append(newTeam)
 
-    context = {
-        'team_list': full_team
-    }
+    context = {'user': request.user.is_authenticated, 'team_list': full_team}
     return render(request, 'pokedex/pokemonTeam.html', context)
-
 # Compte utilisateur
 
 

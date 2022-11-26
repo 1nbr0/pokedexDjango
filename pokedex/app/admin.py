@@ -3,6 +3,7 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from .models import PokeTeam
 from .models import User
 from .models import UserInfo
+from .models import Pokemon
 
 # Register your models here.
 class UserInfoInline(admin.StackedInline):
@@ -18,3 +19,4 @@ class UserAdmin(BaseUserAdmin):
 admin.site.unregister(User)
 admin.site.register(User, UserAdmin)
 admin.site.register(PokeTeam)
+admin.site.register(Pokemon)
