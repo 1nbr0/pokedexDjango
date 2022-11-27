@@ -16,9 +16,9 @@
     <body class="app bg-app-gradient">
         {% include "../navigation/header.html" %}
         <main class="app-container container">
-            <h1 class="mb-2">Profil de {{user}}</h1>
+            <h1 class="text-start mt-3 animate__animated animate__fadeInLeft animate__slow">Profil de {{user}}</h1>
             <div class="d-flex flex-column flex-nowrap align-items-center">
-              <h2>Équipe en cours de création</h2>
+              <h2 class="mt-3">Équipe en cours de création</h2>
               {% for teams in current_team %}
                 <div class="card-team">
                   <div class="text-start">
@@ -26,11 +26,11 @@
                     <form action="{% url 'updateTeamTitle' %}" method="POST" class="d-flex no-block col-md-12">
                       {% csrf_token %}
                       {% if teams.title == None %}
-                        <input class="form-control" type="text" name="title" placeholder="Renseigner le nom de votre équipe">
+                        <input class="form-control rounded-4" type="text" name="title" placeholder="Renseigner le nom de votre équipe">
                       {% else %}
-                        <input class="form-control" type="text" name="title" value="{{teams.title}}">
+                        <input class="form-control rounded-4" type="text" name="title" value="{{teams.title}}">
                       {% endif %}
-                      <button type="submit" class="btn btn-primary ms-3">Modifier</button>
+                      <button type="submit" class="btn rounded-4 btn-primary ms-3">Modifier</button>
                     </form>
                   </div>
                   <div class="container p-4">
@@ -174,7 +174,7 @@
                   </div>
                   <form action="{% url 'createTeam' %}" method="POST" class="float-end">
                     {% csrf_token %}
-                    <button type="submit" class="btn btn-primary">Créer l'équipe</button>
+                    <button type="submit" class="btn rounded-4 btn-primary">Créer l'équipe</button>
                   </form>
                 </div>
               {% endfor %}
@@ -182,20 +182,9 @@
               <h2>Anciennes équipes</h2>
               {% for team in team_list %}
                   <div class="card-team">
-                      <div class="text-start">
-                          <h2 class="">{{ team.title|title }}</h2>
+                      <div class="text-start ps-3 pt-2">
+                          <h2>{{ team.title|title }}</h2>
                           <span class="text-secondary">Créé par : {{ team.author }}</span>
-                          <div class="float-end">
-                            <form action="{% url 'removeTeam' %}" method="POST" class="float-end">
-                              {% csrf_token %}
-                              <input type="hidden" name="id" value="{{team.id}}">
-                              <button type="submit" class="btn rounded-5 btn-danger">
-                                <span class="material-icons">
-                                delete
-                                </span>
-                              </button>
-                            </form>
-                          </div>
                       </div>
                       <div class="container p-4">
                           <div class="d-flex flex-row flex-wrap justify-content-center">
@@ -280,6 +269,18 @@
                               </div>
                               {% endfor %}
                           </div>
+                      </div>
+                      <div class="float-end">
+                        <form action="{% url 'removeTeam' %}" method="POST">
+                          {% csrf_token %}
+                          <input type="hidden" name="id" value="{{team.id}}">
+                          <button type="submit" class="btn rounded-4 btn-danger d-flex align-items-center">
+                            <span class="material-icons">
+                            delete
+                            </span>
+                            <span> Supprimer l'équipe</span>
+                          </button>
+                        </form>
                       </div>
                   </div>
               {% endfor %}

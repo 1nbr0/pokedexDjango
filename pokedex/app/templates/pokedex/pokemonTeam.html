@@ -16,15 +16,15 @@
     <body class="app bg-app-gradient">
         {% include "./navigation/header.html" %}
         <main class="app-container container">
-            <h1 class="mb-2">Toutes les équipes</h1>
+            <h1 class="mt-3">Toutes les équipes</h1>
             <div class="d-flex flex-column flex-nowrap align-items-center">
                 {% for team in team_list %}
                     <div class="card-team">
-                        <div class="text-start">
-                            <h2 class="">{{ team.title|title }}</h2>
+                        <div class="text-start ps-3 pt-2">
+                            <h2>{{ team.title|title }}</h2>
                             <span class="text-secondary">Créé par : {{ team.author }}</span>
                         </div>
-                        <div class="container p-4">
+                        <div class="container">
                             <div class="d-flex flex-row flex-wrap justify-content-center">
                                 {% for pokemon in team.pokemon1 %}
                                 <div class="col-md-3 card pokemon" style="background-color: {{ pokemon.backgroundColor }}">
