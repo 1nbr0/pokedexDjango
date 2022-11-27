@@ -4,19 +4,16 @@
       <img src="../../../static/images/logo.svg" alt="Logo" width="30" height="24" class="d-inline-block align-text-top">
       <span>P<img src="../../../static/images/o-pokedex.png" alt="o de pokedex">keDex</span>
     </a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
     <div class="collapse navbar-collapse justify-content-between" id="navbarNavAltMarkup">
       <div class="navbar-nav">
-        <a class="nav-link" href="{% url 'team' %}">
+        <a class="nav-link {% if request.resolver_match.url_name == 'team' %}active{% endif %}" href="{% url 'team' %}">
           <img src="../../../static/images/pokeballs.png" alt="teams" width="24" height="24">
           Equipes
         </a>
       </div>
       <form class="d-flex no-block col-sm-4 col-md-5" role="search" action="{% url 'index' %}">
-        <input class="form-control me-2" type="search" name="search" placeholder="Rechercher un pokemon" aria-label="Rechercher">
-        <button class="btn btn-outline-danger" type="submit">
+        <input class="form-control me-2 rounded-4 animate__animated animate__fadeInDown animate__slower" type="search" name="search" placeholder="Rechercher un pokemon" aria-label="Rechercher">
+        <button class="btn rounded-4 btn-outline-danger" type="submit">
           <span class="d-flex text-center">
             <img class="m-1" src="../../../static/images/pokedex-load.png" alt="rechercher" width="16" height="16">
             Rechercher

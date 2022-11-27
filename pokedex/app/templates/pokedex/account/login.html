@@ -27,14 +27,14 @@
                     {% csrf_token %}
                     <div class="mb-3">
                         <label for="InputUsername" class="form-label">Identifiant</label>
-                        <input type="username" name="username" id="InputUsername" required class="form-control" aria-label="username">
+                        <input type="username" name="username" id="InputUsername" required class="form-control rounded-4" aria-label="username">
                         <div id="emailHelp" class="form-text">Nous ne partagerons jamais votre identifiant avec qui que ce soit.</div>
                     </div>
                     <div class="mb-3">
                         <label for="InputPassword" class="form-label">Mot de passe</label>
-                        <input type="password" name="password" id="InputPassword" required class="form-control" aria-label="password">
+                        <input type="password" name="password" id="InputPassword" required class="form-control rounded-4" aria-label="password">
                     </div>
-                    <button type="submit" class="btn btn-danger">Connexion</button>
+                    <button type="submit" class="btn rounded-4 btn-danger">Connexion</button>
                 </form>
             </div>
             <div class="d-flex flex-row flex-wrap justify-content-center align-content-around w-100 h-100">
@@ -42,7 +42,7 @@
                 <a href="{% url 'register' %}" class="hover-underline-animation">Inscription</a>
             </div>
             <div class="mb-4">
-                <a href="{% url 'index' %}" class="btn btn-dark">Retour au P<img src="../../../static/images/o-pokedex.png" alt="o de pokedex">keDex</a>
+                <a href="{% url 'index' %}" class="btn rounded-4 btn-dark">Retour au P<img src="../../../static/images/o-pokedex.png" alt="o de pokedex">keDex</a>
             </div>
         </div>
     </main>

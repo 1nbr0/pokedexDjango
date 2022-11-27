@@ -1,12 +1,32 @@
+@font-face {
+  font-family: 'Montserrat';
+  src: url('../../fonts/Montserrat-Regular.ttf');
+  font-weight: normal;
+}
+
+@font-face {
+  font-family: 'Montserrat';
+  src: url('../../fonts/Montserrat-Bold.ttf');
+  font-weight: bold;
+}
+
+@font-face {
+  font-family: 'Montserrat';
+  src: url('../../fonts/Montserrat-Medium.ttf');
+  font-weight: medium;
+}
+
 html,
 body {
   margin: 0px;
   height: 100%;
   box-sizing: border-box;
+  font-family: 'Montserrat', sans-serif;
 }
 
 h1 {
   letter-spacing: 3px;
+  font-weight: medium;
 }
 
 .app {
@@ -46,8 +66,13 @@ h1 {
   background-color: #eee;
   border-radius: 1.5rem;
   box-shadow: 0 3px 15px rgba(100, 100, 100, 0.5);
+  transition: all 0.3s cubic-bezier(.25,.8,.25,1);
   margin: 20px;
   padding: 20px;
+}
+
+.pokemon:hover {
+  box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22)
 }
 
 .link-card {
@@ -90,7 +115,6 @@ h1 {
 .numberOverPokemon {
   font-size: 4rem;
   letter-spacing: 0.3rem;
-  font-weight: 600;
   color: rgba(0, 0, 0, 0.683);
   position: absolute;
   bottom: 30px;
@@ -115,9 +139,7 @@ h1 {
 .name {
   margin-top: 10px;
   margin-bottom: 15px;
-  letter-spacing: 1px;
   color: #282c34;
-  font-weight: 600;
 }
 
 .nameOnDetail {
@@ -211,14 +233,6 @@ h1 {
 	margin: 20px 12% 20px 12%;
   padding: 20px;
 	overflow: hidden;
-}
-
-.card-pokemon-team {
-  width: 280px;
-  height: 160px;
-  box-shadow: 0 3px 15px rgba(100, 100, 100, 0.5);
-  border-radius: 1rem;
-  margin: 8px;
 }
 
 /* BTN AJOUT TEAM */

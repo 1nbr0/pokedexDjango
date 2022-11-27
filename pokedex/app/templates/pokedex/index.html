@@ -17,7 +17,7 @@
 <body class="app bg-app-gradient">
   {% include "./navigation/header.html" %}
   <main class="app-container">
-    <h1 class="mb-2">PokeDex</h1>
+    <h1 class="mt-3">PokeDex</h1>
     <div class="container animate__animated animate__zoomIn animate__slow">
       <div class="row justify-content-center">
         {% if pokemons|length > 0 %}
@@ -54,26 +54,26 @@
           <form method="POST">
             {% csrf_token %}
             <input type="hidden" name="previous" value="{{pagination.previous}}">
-            <button type="button submit" class="btn btn-outline-primary btn-lg">Précédent</button>
+            <button type="button submit" class="btn rounded-4 btn-outline-primary btn-lg">Précédent</button>
           </form>
         {% else %}
           <form method="POST" >
             {% csrf_token %}
             <input type="hidden" name="previous" value="{{pagination.previous}}">
-            <button type="button submit" class="btn btn-outline-secondary btn-lg" disabled>Précédent</button>
+            <button type="button submit" class="btn rounded-4 btn-outline-secondary btn-lg" disabled>Précédent</button>
           </form>
         {% endif %}
         {% if pagination.next|length > 0 %}
           <form method="POST">
             {% csrf_token %}
             <input type="hidden" name="next" value="{{pagination.next}}">
-            <button type="button submit" class="btn btn-outline-primary btn-lg">Suivant</button>
+            <button type="button submit" class="btn rounded-4 btn-outline-primary btn-lg">Suivant</button>
           </form>
         {% else %}
           <form method="POST" >
             {% csrf_token %}
             <input type="hidden" name="next" value="{{pagination.next}}">
-            <button type="button submit" class="btn btn-outline-secondary btn-lg" disabled>Suivant</button>
+            <button type="button submit" class="btn rounded-4 btn-outline-secondary btn-lg" disabled>Suivant</button>
           </form>
         {% endif %}
       </div>
