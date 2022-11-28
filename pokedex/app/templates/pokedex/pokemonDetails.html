@@ -122,20 +122,23 @@
                         </div>
                       </li>
                     </ul>
+                    <div class="d-flex flex-row flex-wrap justify-content-around">
+                      <div class="d-flex flex-column flex-nowrap">
+                        <h5>Espèce</h5>
+                        <span class="pokemonSpecies"> {{ pokemon.species.name }}</span>
+                      </div>
+                      <div class="d-flex flex-column flex-nowrap">
+                        <h5>Capacités</h5>
+                        <span class="pokemonAbilities-01"> {{ pokemon.abilities.0.ability.name }}</span>
+                        <span class="pokemonAbilities-02"> {{ pokemon.abilities.1.ability.name }}</span>
+                      </div>
+                      <div class="d-flex flex-column">
+                        <hr>
+                        <span>{{ pokemonDetails.flavor_text_entries.44.flavor_text }}</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
-                        <p></p>
-                          <h3>Species :</h3>
-                          <p></p>
-                            <div class="pokemonSpecies"> {{ pokemon.species.name }}</div>
-                              <p></p>
-                          <h3>Abilities :</h3>
-                          <p></p>
-                            <div class="pokemonAbilities-01"> {{ pokemon.abilities.0.ability.name }}</div>
-                              <div class="pokemonAbilities-02"> {{ pokemon.abilities.1.ability.name }}</div>
-================================================================
-                                <div>{{ pokemonDetails.flavor_text_entries.44.flavor_text }}</div>
-================================================================
             </div>
           </div>
         <div class="btn-add-team">
