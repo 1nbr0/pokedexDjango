@@ -60,9 +60,19 @@
           <div class="d-flex justify-content-center align-items-center h-100 w-50">
             <div class="lineSeparation h-75 w-75">
               <h2 class="animate__animated animate__fadeInRight animate__slow">Stats</h2>
+                <div class="stat-01">HP : {{ pokemon.stats.0.base_stat }}</div>
+                  <div class="stat-02">ATTACK : {{ pokemon.stats.1.base_stat }}</div>
+                    <div class="stat-03">DEFENSE : {{ pokemon.stats.3.base_stat }}</div>
+                      <div class="stat-04">SPECIAL ATTACK : {{ pokemon.stats.4.base_stat }}</div>
+                        <div class="stat-05">SPECIAL DEFENSE : {{ pokemon.stats.5.base_stat }}</div>
+                          <h3>Species :</h3>
+                            <div class="pokemonSpecies"> {{ pokemon.species.name }}</div>
+                          <h3>Abilities :</h3>
+                            <div class="pokemonAbilities-01"> {{ pokemon.abilities.0.ability.name }}</div>
+                              <div class="pokemonAbilities-02"> {{ pokemon.abilities.1.ability.name }}</div>
+                                <div>{{ pokemonDetails.flavor_text_entries.44.flavor_text }}</div>
             </div>
           </div>
-        </div>
         <div class="btn-add-team">
           <form action="{% url 'addPokemon' %}" method="post">
             {% csrf_token %}

@@ -165,6 +165,9 @@ def pokemonDetails(request, id):
         id = request.POST.get('id')
         
     pokemonDetails.append(getPokemonById(id))
+    urlDetails = f'https://pokeapi.co/api/v2/pokemon-species/{id}'
+    r = requests.get(urlDetails)
+    results = r.json()
 
     backgroundColors = {
         "fire": "#FDDFDF",
@@ -220,7 +223,7 @@ def pokemonDetails(request, id):
         Previous = 1
     else:
         Previous = id - 1
-    return render(request, "pokedex/pokemonDetails.html", {'pokemons': pokemonDetails, 'Previous': Previous, 'Next': Next})
+    return render(request, "pokedex/pokemonDetails.html", {'pokemons': pokemonDetails, 'pokemonDetails': results, 'Previous': Previous, 'Next': Next})
 
 
 # Gestion des équipes
