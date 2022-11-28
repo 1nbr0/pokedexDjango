@@ -60,17 +60,82 @@
           <div class="d-flex justify-content-center align-items-center h-100 w-50">
             <div class="lineSeparation h-75 w-75">
               <h2 class="animate__animated animate__fadeInRight animate__slow">Stats</h2>
-                <div class="stat-01">HP : {{ pokemon.stats.0.base_stat }}</div>
-                  <div class="stat-02">ATTACK : {{ pokemon.stats.1.base_stat }}</div>
-                    <div class="stat-03">DEFENSE : {{ pokemon.stats.3.base_stat }}</div>
-                      <div class="stat-04">SPECIAL ATTACK : {{ pokemon.stats.4.base_stat }}</div>
-                        <div class="stat-05">SPECIAL DEFENSE : {{ pokemon.stats.5.base_stat }}</div>
+                <div class="container animate__animated animate__fadeInRight animate__slow">
+                  <div class="mt-5">
+                    <ul class="list-unstyled mb-0 pb-0">
+                      <li class="row mb-3 ms-2">
+                        <h5 class="col-3 text-start align-self-center">Hp</h5>
+                        <span class="col-2 align-self-center">{{ pokemon.hp }}</span>
+                        <div class="col-7 align-self-center">
+                          <div class="progress" style="height: 6px;">
+                            <div class="progress-bar" role="progressbar" style="width: {{ pokemon.hp }}%; background-color: {{ pokemon.color }}" aria-valuenow="{{ pokemon.hp }}" aria-valuemin="0" aria-valuemax="100"></div>
+                          </div>
+                        </div>
+                      </li>
+                      <li class="row mb-3 ms-2">
+                        <h5 class="col-3 text-start align-self-center">Attaque</h5>
+                        <span class="col-2 align-self-center">{{ pokemon.attack }}</span>
+                        <div class="col-7 align-self-center">
+                          <div class="progress" style="height: 6px;">
+                            <div class="progress-bar" role="progressbar" style="width: {{ pokemon.attack }}%; background-color: {{ pokemon.color }}" aria-valuenow="{{ pokemon.hp }}" aria-valuemin="0" aria-valuemax="100"></div>
+                          </div>
+                        </div>
+                      </li>
+                      </li>
+                      <li class="row mb-3 ms-2">
+                        <h5 class="col-3 text-start align-self-center">Defense</h5>
+                        <span class="col-2 align-self-center">{{ pokemon.defense }}</span>
+                        <div class="col-7 align-self-center">
+                          <div class="progress" style="height: 6px;">
+                            <div class="progress-bar" role="progressbar" style="width: {{ pokemon.defense }}%; background-color: {{ pokemon.color }}" aria-valuenow="{{ pokemon.hp }}" aria-valuemin="0" aria-valuemax="100"></div>
+                          </div>
+                        </div>
+                      </li>
+                      </li>
+                      <li class="row mb-3 ms-2">
+                        <h5 class="col-3 text-start align-self-center">Attaque spécial</h5>
+                        <span class="col-2 align-self-center">{{ pokemon.specialAttack }}</span>
+                        <div class="col-7 align-self-center">
+                          <div class="progress" style="height: 6px;">
+                            <div class="progress-bar" role="progressbar" style="width: {{ pokemon.specialAttack }}%; background-color: {{ pokemon.color }}" aria-valuenow="{{ pokemon.hp }}" aria-valuemin="0" aria-valuemax="100"></div>
+                          </div>
+                        </div>
+                      </li>
+                      </li>
+                      <li class="row mb-3 ms-2">
+                        <h5 class="col-3 text-start align-self-center">Defense spécial</h5>
+                        <span class="col-2 align-self-center">{{ pokemon.specialDefense }}</span>
+                        <div class="col-7 align-self-center">
+                          <div class="progress" style="height: 6px;">
+                            <div class="progress-bar" role="progressbar" style="width: {{ pokemon.specialDefense }}%; background-color: {{ pokemon.color }}" aria-valuenow="{{ pokemon.hp }}" aria-valuemin="0" aria-valuemax="100"></div>
+                          </div>
+                        </div>
+                      </li>
+                      </li>
+                      <li class="row mb-3 ms-2">
+                        <h5 class="col-3 text-start align-self-center">Vitesse</h5>
+                        <span class="col-2 align-self-center">{{ pokemon.speed }}</span>
+                        <div class="col-7 align-self-center">
+                          <div class="progress" style="height: 6px;">
+                            <div class="progress-bar" role="progressbar" style="width: {{ pokemon.speed }}%; background-color: {{ pokemon.color }}" aria-valuenow="{{ pokemon.hp }}" aria-valuemin="0" aria-valuemax="100"></div>
+                          </div>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+                        <p></p>
                           <h3>Species :</h3>
+                          <p></p>
                             <div class="pokemonSpecies"> {{ pokemon.species.name }}</div>
+                              <p></p>
                           <h3>Abilities :</h3>
+                          <p></p>
                             <div class="pokemonAbilities-01"> {{ pokemon.abilities.0.ability.name }}</div>
                               <div class="pokemonAbilities-02"> {{ pokemon.abilities.1.ability.name }}</div>
+================================================================
                                 <div>{{ pokemonDetails.flavor_text_entries.44.flavor_text }}</div>
+================================================================
             </div>
           </div>
         <div class="btn-add-team">

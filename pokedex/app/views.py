@@ -163,7 +163,6 @@ def pokemonDetails(request, id):
     id = id
     if (request.POST.get('id')):
         id = request.POST.get('id')
-        
     pokemonDetails.append(getPokemonById(id))
     urlDetails = f'https://pokeapi.co/api/v2/pokemon-species/{id}'
     r = requests.get(urlDetails)
@@ -213,13 +212,22 @@ def pokemonDetails(request, id):
     for pokemon in pokemonDetails:
         pokemon["backgroundColor"] = backgroundColors[pokemon["types"][0]["type"]["name"]]
         pokemon["color"] = colors[pokemon["types"][0]["type"]["name"]]
+        pokemon["weight"] = pokemon["weight"]
+        pokemon["height"] = pokemon["height"]
+        pokemon["move"] = str(pokemon["moves"][0]["move"]["name"])
+        pokemon["hp"] = pokemon["stats"][0]["base_stat"]
+        pokemon["attack"] = pokemon["stats"][1]["base_stat"]
+        pokemon["defense"] = pokemon["stats"][2]["base_stat"]
+        pokemon["specialAttack"] = pokemon["stats"][3]["base_stat"]
+        pokemon["specialDefense"] = pokemon["stats"][4]["base_stat"]
+        pokemon["speed"] = pokemon["stats"][5]["base_stat"]
     Next = 1
-    if(id is 1000):
+    if (id == 1000):
         Next = 1000
     else:
         Next = id + 1
     Previous = 1
-    if(id is 1):
+    if (id == 1):
         Previous = 1
     else:
         Previous = id - 1
